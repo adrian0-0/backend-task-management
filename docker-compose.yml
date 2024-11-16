@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:14.2-alpine
+    container_name: task-management
+    hostname: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - APP_DB_USER=postgres
+      - APP_DB_PASS=postgres
+      - APP_DB_NAME=postgres
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-q', '-d', 'postgres', '-U', 'root']
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    volumes:
+      - ./scripts:/docker-entrypoint-initdb.d/
+    ports:
+      - '5434:5432'
