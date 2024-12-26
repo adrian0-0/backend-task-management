@@ -16,6 +16,7 @@ import { TaskRepository } from './tasks/tasks.repository';
       database: 'postgres',
       autoLoadEntities: true,
       synchronize: true,
+      entities: [TaskEntity],
     }),
   ],
 })
