@@ -10,7 +10,10 @@ import { TaskEntity } from './task.entity';
 
 @Injectable()
 export class TasksService {
-  constructor(private readonly taskRepository: TaskRepository) {}
+  constructor(
+    @InjectRepository(TaskRepository)
+    private readonly taskRepository: TaskRepository,
+  ) {}
 
   async getTasks(filterDto: GetStatusFilterDto): Promise<TaskEntity[]> {
     return this.taskRepository.getTasks(filterDto);
@@ -47,9 +50,4 @@ export class TasksService {
 
     await this.taskRepository.save(findTask);
   }
-  // updateTaskStatusById(id: string, status: Status): ITasks {
-  //   const task = this.validateTaskIdExistance(id);
-  //   task.status = status;
-  //   return task;
-  // }
 }
