@@ -1,9 +1,9 @@
-export interface ITasks {
-  id: string;
-  title?: string;
-  description?: string;
-  status?: Status;
-}
+// export interface ITasks {
+//   id: string;
+//   title?: string;
+//   description?: string;
+//   status?: Status;
+// }
 
 // export interface IStatus {
 //   id: string;
