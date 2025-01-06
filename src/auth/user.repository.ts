@@ -32,10 +32,4 @@ export class UserRepository extends Repository<UserEntity> {
       }
     }
   }
-
-  async loginUser(
-    authCredentialDto: AuthCredentialsDto,
-  ): Promise<{ acessToken: string }> {
-    return;
-  }
 }
