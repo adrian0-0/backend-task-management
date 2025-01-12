@@ -24,6 +24,9 @@ import { TaskEntity } from '../tasks/task.entity';
           autoLoadEntities: true,
           synchronize: true,
           entities: [TaskEntity],
+          ssl: {
+            rejectUnauthorized: false,
+          },
         };
       },
     }),
