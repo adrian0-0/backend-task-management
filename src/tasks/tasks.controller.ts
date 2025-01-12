@@ -18,7 +18,9 @@ import { TaskEntity } from './task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from 'src/auth/user.entity';
 import { User } from 'src/auth/get-user.decorator';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
+@ApiBearerAuth()
 @Controller('tasks')
 export class TasksController {
   constructor(private taskService: TasksService) {}
