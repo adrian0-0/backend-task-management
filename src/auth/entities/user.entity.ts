@@ -1,7 +1,8 @@
-import { TaskEntity } from '../tasks/task.entity';
+import { ApiProperty } from '@nestjs/swagger';
+import { TaskEntity } from '../../tasks/entities/task.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity('user')
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -12,6 +13,6 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @OneToMany((_type) => TaskEntity, (task) => task.user, { eager: true })
+  @OneToMany(() => TaskEntity, (task) => task.user)
   task: TaskEntity[];
 }

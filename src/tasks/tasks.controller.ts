@@ -14,18 +14,18 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { GetStatusFilterDto } from './dto/get-status-filter.dto';
 import { UpdateTasksStatusDto } from './dto/update-task-status.dto';
 import { Status } from './task-status.enum';
-import { TaskEntity } from './task.entity';
+import { TaskEntity } from './entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { UserEntity } from '../auth/user.entity';
+import { UserEntity } from '../auth/entities/user.entity';
 import { User } from '../auth/get-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
 @ApiBearerAuth()
 @Controller('tasks')
+@UseGuards(AuthGuard())
 export class TasksController {
   constructor(private taskService: TasksService) {}
 
-  @UseGuards(AuthGuard())
   @Get()
   getTaks(@Query() filterDto: GetStatusFilterDto) {
     return this.taskService.getTasks(filterDto);

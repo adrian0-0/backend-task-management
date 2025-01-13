@@ -6,8 +6,8 @@ import { UpdateTasksStatusDto } from './dto/update-task-status.dto';
 import { TaskRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { throwDeprecation } from 'process';
-import { TaskEntity } from './task.entity';
-import { UserEntity } from '../auth/user.entity';
+import { TaskEntity } from './entities/task.entity';
+import { UserEntity } from '../auth/entities/user.entity';
 
 @Injectable()
 export class TasksService {
