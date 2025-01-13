@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configSchema } from './config.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TaskEntity } from '../tasks/task.entity';
+import { TaskEntity } from '../tasks/entities/task.entity';
 
 @Module({
   imports: [
@@ -24,9 +24,10 @@ import { TaskEntity } from '../tasks/task.entity';
           autoLoadEntities: true,
           synchronize: true,
           entities: [TaskEntity],
-          ssl: {
-            rejectUnauthorized: false,
-          },
+          // Para testar o banco de dados em ambiente local
+          // ssl: {
+          //   rejectUnauthorized: false,
+          // },
         };
       },
     }),

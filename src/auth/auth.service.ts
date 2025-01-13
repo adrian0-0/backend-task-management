@@ -8,7 +8,7 @@ import {
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entities/user.entity';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { throwError } from 'rxjs';
 import { compare } from 'bcrypt';
@@ -32,15 +32,15 @@ export class AuthService {
 
   async signin(
     authCredentialDto: AuthCredentialsDto,
-  ): Promise<{ acessToken: string }> {
+  ): Promise<{ acessToken: string; userId: string }> {
     const { username, password } = authCredentialDto;
     const findUser = await this.userRepository.findOneBy({ username });
 
     if (findUser && (await compare(password, findUser.password))) {
-      // return this.userRepository.loginUser(authCredentialDto);
+      const { id: userId } = findUser;
       const payload: IJwtPayload = { username };
       const acessToken: string = await this.jwtService.sign(payload);
-      return { acessToken };
+      return { acessToken, userId };
     } else {
       throw new UnauthorizedException('Please check your login credentials');
     }

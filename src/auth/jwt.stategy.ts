@@ -8,7 +8,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserRepository } from './user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IJwtPayload } from './jwt-payload.interface';
-import { UserEntity } from './user.entity';
+import { UserEntity } from './entities/user.entity';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 
 @Injectable()
