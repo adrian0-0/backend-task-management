@@ -5,8 +5,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
 import { genSalt, hash } from 'bcrypt';
 
 @Injectable()
@@ -31,5 +30,14 @@ export class UserRepository extends Repository<UserEntity> {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async findTaskByUser(id: string): Promise<void> {
+    const sql = await this.query(
+      `select t.id, t.title, t.description 
+      from task t inner join "user" u ON "userId" = U.id and U.id = '${id}'`,
+    );
+
+    return sql;
   }
 }

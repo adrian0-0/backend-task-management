@@ -5,10 +5,10 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from './user.repository';
+import { UserRepository } from '../users/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthCredentialsDto } from './dto/auth-credentials.dto';
-import { UserEntity } from './entities/user.entity';
+import { UserEntity } from '../users/entities/user.entity';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { throwError } from 'rxjs';
 import { compare } from 'bcrypt';

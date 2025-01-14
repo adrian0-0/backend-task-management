@@ -16,7 +16,7 @@ import { UpdateTasksStatusDto } from './dto/update-task-status.dto';
 import { Status } from './task-status.enum';
 import { TaskEntity } from './entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { UserEntity } from '../auth/entities/user.entity';
+import { UserEntity } from '../users/entities/user.entity';
 import { User } from '../auth/get-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
