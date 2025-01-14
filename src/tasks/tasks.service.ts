@@ -7,7 +7,7 @@ import { TaskRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { throwDeprecation } from 'process';
 import { TaskEntity } from './entities/task.entity';
-import { UserEntity } from '../auth/entities/user.entity';
+import { UserEntity } from '../users/entities/user.entity';
 
 @Injectable()
 export class TasksService {

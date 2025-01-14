@@ -1,7 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Status } from '../task-status.enum';
-import { UserEntity } from '../../auth/entities/user.entity';
-import { Exclude } from 'class-transformer';
+import { UserEntity } from '../../users/entities/user.entity';
 
 @Entity('task')
 export class TaskEntity {
