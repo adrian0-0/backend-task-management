@@ -5,7 +5,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { AuthCredentialsDto } from '../auth/dto/auth-credentials.dto';
+import { SignUpCredentialsDto } from '../auth/dto/auth-credentials.dto';
 import { genSalt, hash } from 'bcrypt';
 
 @Injectable()
@@ -13,19 +13,20 @@ export class UserRepository extends Repository<UserEntity> {
   constructor(private dataSource: DataSource) {
     super(UserEntity, dataSource.createEntityManager());
   }
-  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    const { username, password } = authCredentialsDto;
+  async createUser(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
+    const { name, email, password } = signUpCredentialsDto;
 
     const salt = await genSalt();
     const hashedPassword = await hash(password, salt);
 
-    const userCreation = this.create({ username, password: hashedPassword });
+    const userCreation = this.create({ name, email, password: hashedPassword });
+    console.log(userCreation);
     try {
       await this.save(userCreation);
     } catch (error) {
       const uniqueViolationErr = '23505';
       if (error.code === uniqueViolationErr) {
-        throw new ConflictException('username already exists');
+        throw new ConflictException('email already exists');
       } else {
         throw new InternalServerErrorException();
       }

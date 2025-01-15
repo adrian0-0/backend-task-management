@@ -7,13 +7,14 @@ import {
 } from '@nestjs/common';
 import { UserRepository } from '../users/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { SignUpCredentialsDto } from './dto/auth-credentials.dto';
 import { UserEntity } from '../users/entities/user.entity';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { throwError } from 'rxjs';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtPayload } from './jwt-payload.interface';
+import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 
 @Injectable()
 export class AuthService {
@@ -23,22 +24,22 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(authCredentialDto: AuthCredentialsDto): Promise<void> {
-    if (!authCredentialDto) {
-      throw new NotFoundException(`password or username is empty`);
+  async signup(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
+    if (!signUpCredentialsDto) {
+      throw new NotFoundException(`password or email is empty`);
     }
-    return this.userRepository.createUser(authCredentialDto);
+    return this.userRepository.createUser(signUpCredentialsDto);
   }
 
   async signin(
-    authCredentialDto: AuthCredentialsDto,
+    signInCredentialsDto: SignInCredentialsDto,
   ): Promise<{ acessToken: string; userId: string }> {
-    const { username, password } = authCredentialDto;
-    const findUser = await this.userRepository.findOneBy({ username });
+    const { email, password } = signInCredentialsDto;
+    const findEmail = await this.userRepository.findOneBy({ email });
 
-    if (findUser && (await compare(password, findUser.password))) {
-      const { id: userId } = findUser;
-      const payload: IJwtPayload = { username };
+    if (findEmail && (await compare(password, findEmail.password))) {
+      const { id: userId } = findEmail;
+      const payload: IJwtPayload = { email };
       const acessToken: string = await this.jwtService.sign(payload);
       return { acessToken, userId };
     } else {
