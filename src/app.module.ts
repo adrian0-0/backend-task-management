@@ -9,6 +9,14 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TasksModule, AuthModule, DatabaseModule, UsersModule],
+  imports: [
+    TasksModule,
+    AuthModule,
+    DatabaseModule,
+    UsersModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
 })
 export class AppModule {}
