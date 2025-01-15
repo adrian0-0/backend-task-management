@@ -7,8 +7,11 @@ export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
+  name: string;
+
   @Column({ unique: true })
-  username: string;
+  email: string;
 
   @Column()
   password: string;

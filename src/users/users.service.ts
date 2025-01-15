@@ -19,7 +19,6 @@ export class UsersService {
       const user = await this.userRepository.findOneBy({
         id,
       });
-      console.log(user);
       if (user) {
         return this.userRepository.findTaskByUser(id);
       }
@@ -32,7 +31,6 @@ export class UsersService {
     id: string,
     updateTaskByUserDto: UpdateTaskByUserDto,
   ): Promise<UpdateTaskByUserDto> {
-    console.log(id, updateTaskByUserDto);
     try {
       const task = await this.taskRepository.findOneBy({
         id,
@@ -45,7 +43,6 @@ export class UsersService {
       if (task && user) {
         task.title = title;
         task.description = description;
-        console.log(task);
         return this.taskRepository.save(task);
       }
     } catch (error) {

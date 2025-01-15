@@ -8,12 +8,7 @@ import {
   MinLength,
 } from 'class-validator';
 
-export class SignUpCredentialsDto {
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ default: 'kaizar unhinged' })
-  name: string;
-
+export class SignInCredentialsDto {
   @IsNotEmpty()
   @IsEmail()
   @ApiProperty({ default: 'kaizar@gmail.com' })

@@ -9,6 +9,7 @@ import { TaskEntity } from '../tasks/entities/task.entity';
     ConfigModule.forRoot({
       envFilePath: '.env',
       validationSchema: configSchema,
+      isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
