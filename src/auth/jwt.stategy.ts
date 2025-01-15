@@ -9,29 +9,30 @@ import { UserRepository } from '../users/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IJwtPayload } from './jwt-payload.interface';
 import { UserEntity } from '../users/entities/user.entity';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JWTStrategy extends PassportStrategy(Strategy) {
   constructor(
     @InjectRepository(UserRepository)
     private userRepository: UserRepository,
+    private configService: ConfigService,
   ) {
     super({
-      secretOrKey: 'topSecret51',
+      secretOrKey: configService.get<string>('JWT_SECRET'),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
   }
 
   async validate(payload: IJwtPayload): Promise<UserEntity> {
-    const { username } = payload;
-    const findUser: UserEntity = await this.userRepository.findOneBy({
-      username,
+    const { email } = payload;
+    const findEmail: UserEntity = await this.userRepository.findOneBy({
+      email,
     });
 
-    if (!findUser) {
+    if (!findEmail) {
       throw new UnauthorizedException();
     }
-    return findUser;
+    return findEmail;
   }
 }
