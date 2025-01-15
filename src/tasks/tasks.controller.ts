@@ -13,7 +13,6 @@ import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetStatusFilterDto } from './dto/get-status-filter.dto';
 import { UpdateTasksStatusDto } from './dto/update-task-status.dto';
-import { Status } from './task-status.enum';
 import { TaskEntity } from './entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from '../users/entities/user.entity';

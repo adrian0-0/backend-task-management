@@ -20,7 +20,6 @@ export class UserRepository extends Repository<UserEntity> {
     const hashedPassword = await hash(password, salt);
 
     const userCreation = this.create({ name, email, password: hashedPassword });
-    console.log(userCreation);
     try {
       await this.save(userCreation);
     } catch (error) {
