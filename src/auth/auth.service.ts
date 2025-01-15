@@ -35,6 +35,7 @@ export class AuthService {
     signInCredentialsDto: SignInCredentialsDto,
   ): Promise<{ acessToken: string; userId: string }> {
     const { email, password } = signInCredentialsDto;
+    console.log(process.env.JWT_SECRET + 'signin');
     const findEmail = await this.userRepository.findOneBy({ email });
 
     if (findEmail && (await compare(password, findEmail.password))) {
