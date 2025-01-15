@@ -19,7 +19,7 @@ export class JWTStrategy extends PassportStrategy(Strategy) {
     private configService: ConfigService,
   ) {
     super({
-      secretOrKey: configService.get<string>('JWT_SECRET'),
+      secretOrKey: String(process.env.JWT_SECRET),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
   }

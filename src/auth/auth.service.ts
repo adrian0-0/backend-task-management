@@ -35,11 +35,10 @@ export class AuthService {
     signInCredentialsDto: SignInCredentialsDto,
   ): Promise<{ acessToken: string; userId: string }> {
     const { email, password } = signInCredentialsDto;
-    console.log(process.env.JWT_SECRET + 'signin');
-    const findEmail = await this.userRepository.findOneBy({ email });
+    const findUser = await this.userRepository.findOneBy({ email });
 
-    if (findEmail && (await compare(password, findEmail.password))) {
-      const { id: userId } = findEmail;
+    if (findUser && (await compare(password, findUser.password))) {
+      const { id: userId } = findUser;
       const payload: IJwtPayload = { email };
       const acessToken: string = await this.jwtService.sign(payload);
       return { acessToken, userId };
