@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configSchema } from './config.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskEntity } from '../tasks/entities/task.entity';
+import { StockPileEntity } from 'src/stockpile/entities/stockpile.entity';
 
 @Module({
   imports: [

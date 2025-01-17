@@ -1,10 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Status } from '../task-status.enum';
 import { UserEntity } from '../../users/entities/user.entity';
-import { IsEmpty, IsOptional } from 'class-validator';
-import { timeStamp } from 'console';
-import { networkInterfaces } from 'os';
-import { ApiProperty } from '@nestjs/swagger';
+import { StockPileEntity } from 'src/stockpile/entities/stockpile.entity';
 
 @Entity('task')
 export class TaskEntity {
@@ -21,17 +24,20 @@ export class TaskEntity {
   status: Status;
 
   @Column()
-  @ApiProperty({ default: Date.now() })
-  createdAt: String;
+  createdAt: Date;
 
   @Column()
-  @IsOptional()
-  expectedToFinish: String;
+  expectedToFinish: Date;
 
   @Column()
-  @IsOptional()
-  alreadyFinished: String;
+  alreadyFinished: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.task)
   user: UserEntity;
+
+  @Column({ name: 'userId' })
+  userId: string;
+
+  @OneToMany(() => StockPileEntity, (stockpile) => stockpile.task)
+  stockpile: StockPileEntity[];
 }
