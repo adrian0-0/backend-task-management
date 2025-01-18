@@ -21,8 +21,8 @@ import { UserEntity } from '../users/entities/user.entity';
 import { User } from '../auth/get-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 
-@ApiBearerAuth()
 @Controller('tasks')
+@ApiBearerAuth()
 @UseGuards(AuthGuard())
 export class TasksController {
   constructor(private taskService: TasksService) {}
@@ -55,14 +55,6 @@ export class TasksController {
     @Body() updateTaskDto: UpdateTaskDto,
   ): Promise<UpdateTaskDto> {
     return this.taskService.updateTask(id, user, updateTaskDto);
-  }
-
-  @Patch('stockpile/:id')
-  attachTaskToStockpile(
-    @Param('id') taskId: string,
-    @Body() stockpileId: string,
-  ): Promise<TaskEntity> {
-    return this.taskService.attachTaskToStockpile(taskId, stockpileId);
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)

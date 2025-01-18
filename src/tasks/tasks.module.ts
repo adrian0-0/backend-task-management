@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TasksController } from './tasks.controller';
 import { TasksService } from './tasks.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,10 +6,10 @@ import { TaskRepository } from './tasks.repository';
 import { TaskEntity } from './entities/task.entity';
 import { AuthModule } from '../auth/auth.module';
 import { StockpileService } from '../stockpile/stockpile.service';
-import { StockPileRepository } from '../stockpile/stockpile.repository';
+import { StockpileRepository } from '../stockpile/stockpile.repository';
 import { UsersService } from '../users/users.service';
 import { UserRepository } from '../users/user.repository';
-import { UserEntity } from '../users/entities/user.entity';
+import { StockpileModule } from 'src/stockpile/stockpile.module';
 
 @Module({
   controllers: [TasksController],
@@ -17,10 +17,14 @@ import { UserEntity } from '../users/entities/user.entity';
     TasksService,
     TaskRepository,
     StockpileService,
-    StockPileRepository,
+    StockpileRepository,
     UsersService,
     UserRepository,
   ],
-  imports: [TypeOrmModule.forFeature([TaskEntity]), AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([TaskEntity]),
+    AuthModule,
+    forwardRef(() => StockpileModule),
+  ],
 })
 export class TasksModule {}

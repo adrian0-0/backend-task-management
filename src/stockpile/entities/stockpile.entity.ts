@@ -17,4 +17,7 @@ export class StockPileEntity {
 
   @ManyToOne(() => TaskEntity, (task) => task.stockpile)
   task: TaskEntity;
+
+  @Column({ name: 'taskId' })
+  taskId: string;
 }

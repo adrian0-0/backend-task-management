@@ -1,13 +1,42 @@
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, In } from 'typeorm';
 import { StockPileEntity } from './entities/stockpile.entity';
 import { CreateStockpileDto } from './dto/create-stockpile.dto';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateStockPileDto } from './dto/update-stockpile.dto';
+import { TaskRepository } from 'src/tasks/tasks.repository';
+import { UserEntity } from 'src/users/entities/user.entity';
+import { deepStrictEqual } from 'assert';
 
 @Injectable()
-export class StockPileRepository extends Repository<StockPileEntity> {
-  constructor(private dataSource: DataSource) {
+export class StockpileRepository extends Repository<StockPileEntity> {
+  constructor(
+    private readonly taskRepository: TaskRepository,
+    private dataSource: DataSource,
+  ) {
     super(StockPileEntity, dataSource.createEntityManager());
+  }
+
+  async findAllStockpile(user: UserEntity): Promise<StockPileEntity[]> {
+    const sql = this.query(`
+      select s.* 
+      from task t 
+      inner join "user" u ON t."userId" = u.id 
+      inner join stockpile s on t.id = "taskId" 
+      where u.id = '${user.id}'`);
+    return sql;
+  }
+
+  async findOneStockpile(
+    id: string,
+    user: UserEntity,
+  ): Promise<StockPileEntity> {
+    const sql = this.query(`
+      select s.* 
+      from task t 
+      inner join "user" u ON t."userId" = u.id 
+      inner join stockpile s on t.id = "taskId" 
+      where u.id = '${user.id}' and s.id = '${id}'`);
+    return sql;
   }
 
   async createStockpile(

@@ -1,5 +1,8 @@
 import {
   BadRequestException,
+  ConflictException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -11,7 +14,7 @@ import { TaskRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './entities/task.entity';
 import { UserEntity } from '../users/entities/user.entity';
-import { StockPileRepository } from 'src/stockpile/stockpile.repository';
+import { StockpileRepository } from 'src/stockpile/stockpile.repository';
 import { isUUID } from 'class-validator';
 import { StockpileService } from 'src/stockpile/stockpile.service';
 import { UsersService } from 'src/users/users.service';
@@ -22,17 +25,18 @@ export class TasksService {
     @InjectRepository(TaskRepository)
     private readonly taskRepository: TaskRepository,
     private readonly userService: UsersService,
-    private readonly stockpileRepository: StockPileRepository,
+    private readonly stockpileRepository: StockpileRepository,
+    @Inject(forwardRef(() => StockpileService))
     private readonly stockpileService: StockpileService,
   ) {}
 
-  async verifyId(id: string): Promise<TaskEntity> {
+  async verifyId(id: string, userId: string): Promise<TaskEntity> {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid UUID format for ID');
     }
 
     const findTask = await this.taskRepository.findOne({
-      where: { id },
+      where: { id, userId },
     });
 
     if (!findTask) {
@@ -42,9 +46,9 @@ export class TasksService {
     return findTask;
   }
 
-  async isTheSameUser(taskId: string, userId: string) {
-    if (taskId !== userId) {
-      throw new UnauthorizedException();
+  async isTheSameUser(taskUserId: string, userId: string) {
+    if (taskUserId !== userId) {
+      throw new UnauthorizedException(`Check your users credentials`);
     }
     return true;
   }
@@ -58,8 +62,7 @@ export class TasksService {
   }
 
   async getTaskById(id: string, user: UserEntity): Promise<TaskEntity> {
-    const task = await this.verifyId(id);
-    await this.isTheSameUser(task.userId, user.id);
+    const task = await this.verifyId(id, user.id);
     return task;
   }
 
@@ -75,31 +78,14 @@ export class TasksService {
     user: UserEntity,
     updateTaskDto: UpdateTaskDto,
   ): Promise<UpdateTaskDto> {
-    const task = await this.verifyId(id);
+    const task = await this.verifyId(id, user.id);
     await this.isTheSameUser(task.userId, user.id);
-
     const assignTaskUser = Object.assign(task, updateTaskDto);
     return await this.taskRepository.save(assignTaskUser);
   }
 
-  async attachTaskToStockpile(
-    taskId: string,
-    stockpileId: string,
-  ): Promise<TaskEntity> {
-    const task = await this.verifyId(taskId);
-    const stockpile = await this.stockpileService.verifyId(stockpileId);
-
-    if (task && stockpile) {
-      const assignTaskToStockpile = Object.assign(task, stockpile);
-      const storeTaskStockpile = await this.stockpileRepository.save(
-        assignTaskToStockpile,
-      );
-      return storeTaskStockpile;
-    }
-  }
-
   async deleteTask(id: string, user: UserEntity): Promise<void> {
-    const task = await this.verifyId(id);
+    const task = await this.verifyId(id, user.id);
     await this.isTheSameUser(task.userId, user.id);
     return await this.taskRepository.deleteTask(id);
   }

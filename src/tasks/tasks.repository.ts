@@ -13,8 +13,6 @@ export class TaskRepository extends Repository<TaskEntity> {
     super(TaskEntity, dataSource.createEntityManager());
   }
 
-  async;
-
   async getTasks(
     filterDto: GetStatusFilterDto,
     user: UserEntity,

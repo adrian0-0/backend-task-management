@@ -34,16 +34,4 @@ export class UsersService {
     await this.verifyId(id);
     return await this.userRepository.findTaskByUser(id);
   }
-
-  // async updateTaskbyUser(
-  //   id: string,
-  //   updateTaskByUserDto: UpdateTaskByUserDto,
-  // ): Promise<UpdateTaskByUserDto> {
-  //   const task = await this.taskService.verifyId(id);
-  //   const user = await this.verifyId(id);
-  //   if (task && user) {
-  //     const assignTaskUser = Object.assign(task, updateTaskByUserDto);
-  //     return this.taskRepository.save(assignTaskUser);
-  //   }
-  // }
 }

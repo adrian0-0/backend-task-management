@@ -1,6 +1,16 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateStockpileDto {
+  @IsNotEmpty()
+  @IsUUID()
+  taskId: string;
+
   @IsNotEmpty()
   @IsString()
   name: string;
