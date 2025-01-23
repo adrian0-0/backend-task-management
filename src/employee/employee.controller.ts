@@ -1,10 +1,22 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { User } from 'src/auth/get-user.decorator';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { CreateEmployeeDto } from './dto/create-employee';
+import { CreateEmployeeDto } from './dto/create-employee.dto';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { EmployeeEntity } from './entities/employee.entity';
 import { TaskEmployeeService } from 'src/task-employee/task-employee.service';
 
@@ -42,8 +54,23 @@ export class EmployeeController {
   attachTaskstoEmployee(
     @Param('id') id: string,
     @Body() taskId: string[],
-    user: UserEntity,
+    @User() user: UserEntity,
   ): Promise<void> {
     return this.taskEmployeeService.attachTaskstoEmployee(id, taskId, user);
+  }
+
+  @Patch('/:id')
+  updateEmployee(
+    @Param('id') id: string,
+    @Body() updateEmployeeDto: UpdateEmployeeDto,
+    @User() user: UserEntity,
+  ): Promise<EmployeeEntity> {
+    return this.employeeService.updateEmployee(id, updateEmployeeDto, user);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('/:id')
+  deleteEmployee(@Param('id') id: string, user: UserEntity): Promise<void> {
+    return this.employeeService.deleteEmployee(id, user);
   }
 }

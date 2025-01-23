@@ -62,15 +62,6 @@ export class TasksController {
     return this.taskEmployeeService.attachEmployeesToTask(id, employeeId, user);
   }
 
-  @Patch('/employee/:id')
-  updateEmployeesToTask(
-    @Param('id') id: string,
-    @Body() employeeId: string[],
-    @User() user: UserEntity,
-  ): Promise<void> {
-    return this.taskEmployeeService.updateEmployeesToTask(id, employeeId, user);
-  }
-
   @Patch('/:id')
   updateTaskByUser(
     @Param('id') id: string,
@@ -87,5 +78,15 @@ export class TasksController {
     @User() user: UserEntity,
   ): Promise<void> {
     return this.taskService.deleteTask(id, user);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('/employee/:id')
+  deleteEmployeesToTask(
+    @Param('id') id: string,
+    @Body() employeeId: { id: string },
+    @User() user: UserEntity,
+  ): Promise<void> {
+    return this.taskEmployeeService.deleteEmployeesToTask(id, employeeId, user);
   }
 }

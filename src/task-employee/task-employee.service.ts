@@ -12,6 +12,7 @@ import { EmployeeRepository } from 'src/employee/employee.repository';
 import { In } from 'typeorm';
 import { TaskRepository } from 'src/tasks/tasks.repository';
 import { EmployeeService } from 'src/employee/employee.service';
+import e from 'express';
 
 @Injectable()
 export class TaskEmployeeService {
@@ -20,33 +21,6 @@ export class TaskEmployeeService {
     private readonly employeeService: EmployeeService,
     private readonly taskEmployeeRepository: TaskEmployeeRepository,
   ) {}
-
-  async updateEmployeesToTask(
-    id: string,
-    employeeId: string[],
-    user: UserEntity,
-  ): Promise<void> {
-    await this.taskService.verifyId(id, user.id);
-    const employee = await this.taskEmployeeRepository.find({
-      where: { employeeId: In(employeeId) },
-    });
-
-    const mapDuplicatedValues = employee.map((employee) => employee.employeeId);
-    // const filterDuplicatedEmployee = employeeId.filter(
-    //   (employeeId) => !mapDuplicatedValues.includes(employeeId),
-    // );
-
-    // if (filterDuplicatedEmployee.length === 0) {
-    //   throw new ConflictException(
-    //     `This task with Id ${id} is already assigned for Employee Id ${employeeId}`,
-    //   );
-    // }
-
-    return this.taskEmployeeRepository.updateEmployeesToTask(
-      id,
-      mapDuplicatedValues,
-    );
-  }
 
   async attachEmployeesToTask(
     id: string,
@@ -57,17 +31,6 @@ export class TaskEmployeeService {
     const employee = await this.taskEmployeeRepository.find({
       where: { employeeId: In(employeeId) },
     });
-
-    // const mapDuplicatedValues = employee.map((employee) => employee.employeeId);
-    // const filterDuplicatedEmployee = employeeId.filter(
-    //   (employeeId) => !mapDuplicatedValues.includes(employeeId),
-    // );
-
-    // if (filterDuplicatedEmployee.length === 0) {
-    //   throw new ConflictException(
-    //     `This task with Id ${id} is already assigned for Employee Id ${employeeId}`,
-    //   );
-    // }
 
     return await this.taskEmployeeRepository.attachEmployeesToTask(
       id,
@@ -81,17 +44,20 @@ export class TaskEmployeeService {
       where: { taskId: In(taskId) },
     });
 
-    // const mapTaskId = task.map((task) => task.taskId);
-    // const filterDuplicatedTask = taskId.filter(
-    //   (taskId) => !mapTaskId.includes(taskId),
-    // );
-
-    // if (filterDuplicatedTask.length === 0) {
-    //   throw new ConflictException(
-    //     `This Employee with Id ${id} is already assigned for Task Id ${taskId}`,
-    //   );
-    // }
-
     return await this.taskEmployeeRepository.attachTaskstoEmployee(id, taskId);
+  }
+
+  async deleteEmployeesToTask(
+    id: string,
+    employee: { id: string },
+    user: UserEntity,
+  ): Promise<void> {
+    await this.taskService.verifyId(id, user.id);
+    await this.employeeService.verifyId(employee.id, user);
+
+    return await this.taskEmployeeRepository.deleteEmployeesToTask(
+      id,
+      employee.id,
+    );
   }
 }

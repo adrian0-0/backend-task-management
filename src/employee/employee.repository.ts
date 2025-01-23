@@ -1,9 +1,10 @@
 import { DataSource, Repository } from 'typeorm';
 import { EmployeeEntity } from './entities/employee.entity';
-import { CreateEmployeeDto } from './dto/create-employee';
+import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { CreateTaskToEmployeeDto } from 'src/task-employee/dto/create-task-to-employee.dto';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
 
 @Injectable()
 export class EmployeeRepository extends Repository<EmployeeEntity> {
@@ -25,5 +26,18 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
     });
     const storeEmployee = await this.save(employee);
     return storeEmployee;
+  }
+
+  async updateEmployee(
+    employee: EmployeeEntity,
+    updateEmployeeDto: UpdateEmployeeDto,
+  ): Promise<EmployeeEntity> {
+    const assignEmployee = Object.assign(employee, updateEmployeeDto);
+    const storeEmployee = await this.save(assignEmployee);
+    return storeEmployee;
+  }
+
+  async deleteEmployee(id: string): Promise<void> {
+    await this.delete(id);
   }
 }

@@ -34,8 +34,10 @@ export class TaskEmployeeRepository extends Repository<TaskEmployeeEntity> {
     do update set "employeeId" = excluded."employeeId"`);
   }
 
-  async updateEmployeesToTask(
-    id: string,
-    employeeId: string[],
-  ): Promise<void> {}
+  async deleteEmployeesToTask(
+    taskId: string,
+    employeeId: string,
+  ): Promise<void> {
+    await this.delete({ taskId, employeeId });
+  }
 }

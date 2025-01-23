@@ -5,9 +5,10 @@ import {
 } from '@nestjs/common';
 import { EmployeeEntity } from './entities/employee.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { CreateEmployeeDto } from './dto/create-employee';
+import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeRepository } from './employee.repository';
 import { isUUID } from 'class-validator';
+import { UpdateEmployeeDto } from './dto/update-employee.dto';
 
 @Injectable()
 export class EmployeeService {
@@ -39,6 +40,15 @@ export class EmployeeService {
     return findUser;
   }
 
+  async updateEmployee(
+    id: string,
+    updateEmployeeDto: UpdateEmployeeDto,
+    user: UserEntity,
+  ): Promise<EmployeeEntity> {
+    const employee = await this.verifyId(id, user);
+    return this.employeeRepository.updateEmployee(employee, updateEmployeeDto);
+  }
+
   async createEmployee(
     createEmployeeDto: CreateEmployeeDto,
     user: UserEntity,
@@ -47,5 +57,10 @@ export class EmployeeService {
       createEmployeeDto,
       user,
     );
+  }
+
+  async deleteEmployee(id: string, user: UserEntity): Promise<void> {
+    await this.verifyId(id, user);
+    return await this.employeeRepository.deleteEmployee(id);
   }
 }
