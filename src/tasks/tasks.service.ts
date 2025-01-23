@@ -18,6 +18,8 @@ import { StockpileRepository } from 'src/stockpile/stockpile.repository';
 import { isUUID } from 'class-validator';
 import { StockpileService } from 'src/stockpile/stockpile.service';
 import { UsersService } from 'src/users/users.service';
+import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
+import { EmployeeRepository } from 'src/employee/employee.repository';
 
 @Injectable()
 export class TasksService {
@@ -28,6 +30,7 @@ export class TasksService {
     private readonly stockpileRepository: StockpileRepository,
     @Inject(forwardRef(() => StockpileService))
     private readonly stockpileService: StockpileService,
+    private readonly employeeRepository: EmployeeRepository,
   ) {}
 
   async verifyId(id: string, userId: string): Promise<TaskEntity> {
@@ -61,9 +64,9 @@ export class TasksService {
     return await this.taskRepository.getTasks(filterDto, user);
   }
 
-  async getTaskById(id: string, user: UserEntity): Promise<TaskEntity> {
-    const task = await this.verifyId(id, user.id);
-    return task;
+  async findOneTask(id: string, user: UserEntity): Promise<TaskEntity> {
+    await this.verifyId(id, user.id);
+    return await this.taskRepository.findOneTask(id);
   }
 
   async createTask(

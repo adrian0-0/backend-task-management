@@ -6,6 +6,7 @@ import { Status } from './task-status.enum';
 import { GetStatusFilterDto } from './dto/get-status-filter.dto';
 import { UserEntity } from '../users/entities/user.entity';
 import { compare } from 'bcrypt';
+import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
 
 @Injectable()
 export class TaskRepository extends Repository<TaskEntity> {
@@ -42,6 +43,24 @@ export class TaskRepository extends Repository<TaskEntity> {
     return;
   }
 
+  async findOneTask(id: string) {
+    const sql = await this.query(`
+      select e.id as "employeeId", e.name as "employeeName", e.email as "employeeEmail", t.title as "taskTile",
+      t.description as "taskDescription", t.status as "taskStatus", t."createdAt" as "taskCreatedAt",
+      t."expectedToFinish" as "taskExpectedToFinish", t."alreadyFinished" as "taskAlreadyFinished", s.id as "stockpileId",
+      s."name" as "stockpileName", s.quant as "stockpileQuant", s.description as "stockpileDescription"
+      from task t
+      full join "taskEmployee" te 
+      on te."taskId" = t.id
+      full join employee e
+      on e.id = te."employeeId"
+      full join stockpile s 
+      on s."taskId" = t.id 
+      where t.id = '${id}'
+    `);
+    return sql;
+  }
+
   async createTask(
     createTaskDto: CreateTaskDto,
     user: UserEntity,
@@ -59,8 +78,8 @@ export class TaskRepository extends Repository<TaskEntity> {
     });
     await this.save(task);
   }
-
   async deleteTask(id: string): Promise<void> {
+    console.log(id);
     await this.delete({ id });
   }
 }

@@ -10,6 +10,8 @@ import { UsersService } from 'src/users/users.service';
 import { UserRepository } from 'src/users/user.repository';
 import { TasksModule } from '../tasks/tasks.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { EmployeeService } from '../employee/employee.service';
+import { EmployeeRepository } from '../employee/employee.repository';
 
 @Module({
   controllers: [StockpileController],
@@ -20,6 +22,8 @@ import { AuthModule } from 'src/auth/auth.module';
     TaskRepository,
     UsersService,
     UserRepository,
+    EmployeeService,
+    EmployeeRepository,
   ],
   imports: [
     TypeOrmModule.forFeature([StockPileEntity]),

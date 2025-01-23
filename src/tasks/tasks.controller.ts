@@ -20,12 +20,17 @@ import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from '../users/entities/user.entity';
 import { User } from '../auth/get-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
+import { TaskEmployeeService } from '../task-employee/task-employee.service';
 
 @Controller('tasks')
 @ApiBearerAuth()
 @UseGuards(AuthGuard())
 export class TasksController {
-  constructor(private taskService: TasksService) {}
+  constructor(
+    private taskService: TasksService,
+    private readonly taskEmployeeService: TaskEmployeeService,
+  ) {}
 
   @Get()
   getTaks(@Query() filterDto: GetStatusFilterDto, @User() user: UserEntity) {
@@ -33,11 +38,11 @@ export class TasksController {
   }
 
   @Get('/:id')
-  getTaskbyId(
+  findOneTask(
     @Param('id') id: string,
     @User() user: UserEntity,
   ): Promise<TaskEntity> {
-    return this.taskService.getTaskById(id, user);
+    return this.taskService.findOneTask(id, user);
   }
 
   @Post()
@@ -46,6 +51,24 @@ export class TasksController {
     @User() user: UserEntity,
   ): Promise<void> {
     return this.taskService.createTask(createTaskDto, user);
+  }
+
+  @Post('/employee/:id')
+  attachEmployeesToTask(
+    @Param('id') id: string,
+    @Body() employeeId: string[],
+    @User() user: UserEntity,
+  ): Promise<void> {
+    return this.taskEmployeeService.attachEmployeesToTask(id, employeeId, user);
+  }
+
+  @Patch('/employee/:id')
+  updateEmployeesToTask(
+    @Param('id') id: string,
+    @Body() employeeId: string[],
+    @User() user: UserEntity,
+  ): Promise<void> {
+    return this.taskEmployeeService.updateEmployeesToTask(id, employeeId, user);
   }
 
   @Patch('/:id')

@@ -9,17 +9,25 @@ import { StockpileService } from '../stockpile/stockpile.service';
 import { StockpileRepository } from '../stockpile/stockpile.repository';
 import { UsersService } from '../users/users.service';
 import { UserRepository } from '../users/user.repository';
-import { StockpileModule } from 'src/stockpile/stockpile.module';
+import { StockpileModule } from '../stockpile/stockpile.module';
+import { EmployeeRepository } from '../employee/employee.repository';
+import { EmployeeService } from '../employee/employee.service';
+import { TaskEmployeeService } from '../task-employee/task-employee.service';
+import { TaskEmployeeRepository } from '../task-employee/task-employee.repository';
 
 @Module({
   controllers: [TasksController],
   providers: [
     TasksService,
     TaskRepository,
+    TaskEmployeeRepository,
     StockpileService,
     StockpileRepository,
     UsersService,
     UserRepository,
+    EmployeeService,
+    EmployeeRepository,
+    TaskEmployeeService,
   ],
   imports: [
     TypeOrmModule.forFeature([TaskEntity]),

@@ -8,6 +8,8 @@ import { DatabaseModule } from './database/database.module';
 import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { StockpileModule } from './stockpile/stockpile.module';
+import { EmployeeModule } from './employee/employee.module';
+import { TaskEmployeeModule } from './task-employee/task-employee.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import { StockpileModule } from './stockpile/stockpile.module';
     DatabaseModule,
     UsersModule,
     StockpileModule,
+    EmployeeModule,
+    TaskEmployeeModule,
   ],
 })
 export class AppModule {}

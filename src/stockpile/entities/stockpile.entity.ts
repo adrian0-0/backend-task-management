@@ -15,7 +15,9 @@ export class StockPileEntity {
   @Column()
   description: string;
 
-  @ManyToOne(() => TaskEntity, (task) => task.stockpile)
+  @ManyToOne(() => TaskEntity, (task) => task.stockpile, {
+    onDelete: 'CASCADE',
+  })
   task: TaskEntity;
 
   @Column({ name: 'taskId' })
