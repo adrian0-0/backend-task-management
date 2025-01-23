@@ -1,10 +1,16 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Status } from '../task-status.enum';
 import { UserEntity } from '../../users/entities/user.entity';
-import { IsEmpty, IsOptional } from 'class-validator';
-import { timeStamp } from 'console';
-import { networkInterfaces } from 'os';
-import { ApiProperty } from '@nestjs/swagger';
+import { StockPileEntity } from '../../stockpile/entities/stockpile.entity';
+import { TaskEmployeeEntity } from '../../task-employee/entities/task-employee.entity';
 
 @Entity('task')
 export class TaskEntity {
@@ -21,17 +27,26 @@ export class TaskEntity {
   status: Status;
 
   @Column()
-  @ApiProperty({ default: Date.now() })
-  createdAt: String;
+  createdAt: Date;
 
   @Column()
-  @IsOptional()
-  expectedToFinish: String;
+  expectedToFinish: Date;
 
   @Column()
-  @IsOptional()
-  alreadyFinished: String;
+  alreadyFinished: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.task)
+  @JoinColumn({ name: 'userId' })
   user: UserEntity;
+
+  @Column({ name: 'userId' })
+  userId: string;
+
+  @OneToMany(() => StockPileEntity, (stockpile) => stockpile.task, {
+    onDelete: 'CASCADE',
+  })
+  stockpile: StockPileEntity[];
+
+  @OneToMany(() => TaskEmployeeEntity, (taskEmployee) => taskEmployee.task)
+  taskEmployees: TaskEmployeeEntity[];
 }

@@ -34,7 +34,7 @@ export class UserRepository extends Repository<UserEntity> {
 
   async findTaskByUser(id: string): Promise<void> {
     const sql = await this.query(
-      `select t.id, t.title, t.description 
+      `select t.*
       from task t inner join "user" u ON "userId" = U.id and U.id = '${id}'`,
     );
 

@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDate,
   IsNotEmpty,
@@ -16,11 +17,11 @@ export class CreateTaskDto {
   description: string;
 
   @IsNotEmpty()
-  createdAt: string;
+  createdAt: Date;
 
   @IsOptional()
-  alreadyFinished: string;
+  alreadyFinished: Date;
 
   @IsOptional()
-  expectedToFinish: string;
+  expectedToFinish: Date;
 }

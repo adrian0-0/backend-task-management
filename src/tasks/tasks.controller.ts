@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -12,45 +14,79 @@ import {
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetStatusFilterDto } from './dto/get-status-filter.dto';
-import { UpdateTasksStatusDto } from './dto/update-task-status.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskEntity } from './entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { UserEntity } from '../users/entities/user.entity';
 import { User } from '../auth/get-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
+import { TaskEmployeeService } from '../task-employee/task-employee.service';
 
-@ApiBearerAuth()
 @Controller('tasks')
+@ApiBearerAuth()
 @UseGuards(AuthGuard())
 export class TasksController {
-  constructor(private taskService: TasksService) {}
+  constructor(
+    private taskService: TasksService,
+    private readonly taskEmployeeService: TaskEmployeeService,
+  ) {}
 
   @Get()
-  getTaks(@Query() filterDto: GetStatusFilterDto) {
-    return this.taskService.getTasks(filterDto);
+  getTaks(@Query() filterDto: GetStatusFilterDto, @User() user: UserEntity) {
+    return this.taskService.getTasks(filterDto, user);
   }
 
   @Get('/:id')
-  getTaskbyId(@Param('id') id: string): Promise<TaskEntity> {
-    return this.taskService.getTaskById(id);
+  findOneTask(
+    @Param('id') id: string,
+    @User() user: UserEntity,
+  ): Promise<TaskEntity> {
+    return this.taskService.findOneTask(id, user);
   }
 
   @Post()
-  createTask(@Body() createTaskDto: CreateTaskDto, @User() user: UserEntity) {
+  createTask(
+    @Body() createTaskDto: CreateTaskDto,
+    @User() user: UserEntity,
+  ): Promise<void> {
     return this.taskService.createTask(createTaskDto, user);
   }
 
-  @Patch('/:id/status')
-  updateTaskStatusById(
+  @Post('/employee/:id')
+  attachEmployeesToTask(
     @Param('id') id: string,
-    @Body() updateTasksStatusDto: UpdateTasksStatusDto,
-  ): Promise<TaskEntity> {
-    const { status } = updateTasksStatusDto;
-    return this.taskService.updateTaskStatus(id, status);
+    @Body() employeeId: string[],
+    @User() user: UserEntity,
+  ): Promise<void> {
+    return this.taskEmployeeService.attachEmployeesToTask(id, employeeId, user);
   }
 
+  @Patch('/:id')
+  updateTaskByUser(
+    @Param('id') id: string,
+    @User() user: UserEntity,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ): Promise<UpdateTaskDto> {
+    return this.taskService.updateTask(id, user, updateTaskDto);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('/:id')
-  deleteTaskById(@Param('id') id: string): Promise<void> {
-    return this.taskService.deleteTask(id);
+  deleteTaskById(
+    @Param('id') id: string,
+    @User() user: UserEntity,
+  ): Promise<void> {
+    return this.taskService.deleteTask(id, user);
+  }
+
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('/employee/:id')
+  deleteEmployeesToTask(
+    @Param('id') id: string,
+    @Body() employeeId: { id: string },
+    @User() user: UserEntity,
+  ): Promise<void> {
+    return this.taskEmployeeService.deleteEmployeesToTask(id, employeeId, user);
   }
 }

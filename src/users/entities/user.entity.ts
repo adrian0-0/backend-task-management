@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { TaskEntity } from '../../tasks/entities/task.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { EmployeeEntity } from 'src/employee/entities/employee.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -18,4 +19,7 @@ export class UserEntity {
 
   @OneToMany(() => TaskEntity, (task) => task.user)
   task: TaskEntity[];
+
+  @OneToMany(() => EmployeeEntity, (employee) => employee.user)
+  employee: EmployeeEntity[];
 }

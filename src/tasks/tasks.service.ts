@@ -1,57 +1,95 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { Status } from './task-status.enum';
+import {
+  BadRequestException,
+  ConflictException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetStatusFilterDto } from './dto/get-status-filter.dto';
-import { UpdateTasksStatusDto } from './dto/update-task-status.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { throwDeprecation } from 'process';
 import { TaskEntity } from './entities/task.entity';
 import { UserEntity } from '../users/entities/user.entity';
+import { StockpileRepository } from 'src/stockpile/stockpile.repository';
+import { isUUID } from 'class-validator';
+import { StockpileService } from 'src/stockpile/stockpile.service';
+import { UsersService } from 'src/users/users.service';
+import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
+import { EmployeeRepository } from 'src/employee/employee.repository';
 
 @Injectable()
 export class TasksService {
   constructor(
     @InjectRepository(TaskRepository)
     private readonly taskRepository: TaskRepository,
+    private readonly userService: UsersService,
+    private readonly stockpileRepository: StockpileRepository,
+    @Inject(forwardRef(() => StockpileService))
+    private readonly stockpileService: StockpileService,
+    private readonly employeeRepository: EmployeeRepository,
   ) {}
 
-  async getTasks(filterDto: GetStatusFilterDto): Promise<TaskEntity[]> {
-    return this.taskRepository.getTasks(filterDto);
+  async verifyId(id: string, userId: string): Promise<TaskEntity> {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid UUID format for ID');
+    }
+
+    const findTask = await this.taskRepository.findOne({
+      where: { id, userId },
+    });
+
+    if (!findTask) {
+      throw new NotFoundException(`Task with ID "${id}" not found`);
+    }
+
+    return findTask;
   }
 
-  async getTaskById(id: string): Promise<TaskEntity> {
-    const findOneTask = await this.taskRepository.findOneBy({
-      id,
-    });
-    if (!findOneTask)
-      throw new NotFoundException(`Task with ID "${id}" not found`);
-    return findOneTask;
+  async isTheSameUser(taskUserId: string, userId: string) {
+    if (taskUserId !== userId) {
+      throw new UnauthorizedException(`Check your users credentials`);
+    }
+    return true;
+  }
+
+  async getTasks(
+    filterDto: GetStatusFilterDto,
+    user: UserEntity,
+  ): Promise<TaskEntity[]> {
+    await this.userService.verifyId(user.id);
+    return await this.taskRepository.getTasks(filterDto, user);
+  }
+
+  async findOneTask(id: string, user: UserEntity): Promise<TaskEntity> {
+    await this.verifyId(id, user.id);
+    return await this.taskRepository.findOneTask(id);
   }
 
   async createTask(
     createTaskDto: CreateTaskDto,
     user: UserEntity,
-  ): Promise<TaskEntity> {
+  ): Promise<void> {
     return this.taskRepository.createTask(createTaskDto, user);
   }
 
-  async deleteTask(id: string): Promise<void> {
-    const findTask = await this.getTaskById(id);
-
-    if (!findTask) {
-      return;
-    }
-    return this.taskRepository.deleteTask(id);
+  async updateTask(
+    id: string,
+    user: UserEntity,
+    updateTaskDto: UpdateTaskDto,
+  ): Promise<UpdateTaskDto> {
+    const task = await this.verifyId(id, user.id);
+    await this.isTheSameUser(task.userId, user.id);
+    const assignTaskUser = Object.assign(task, updateTaskDto);
+    return await this.taskRepository.save(assignTaskUser);
   }
 
-  async updateTaskStatus(id: string, status: Status): Promise<TaskEntity> {
-    const findTask = await this.getTaskById(id);
-    if (!findTask) {
-      return;
-    }
-    findTask.status = status;
-
-    await this.taskRepository.save(findTask);
+  async deleteTask(id: string, user: UserEntity): Promise<void> {
+    const task = await this.verifyId(id, user.id);
+    await this.isTheSameUser(task.userId, user.id);
+    return await this.taskRepository.deleteTask(id);
   }
 }

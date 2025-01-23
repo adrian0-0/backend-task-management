@@ -1,52 +1,37 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { TaskEntity } from 'src/tasks/entities/task.entity';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateTaskByUserDto } from './dto/update-task-by-user.dto';
-import { TaskRepository } from 'src/tasks/tasks.repository';
+import { isUUID } from 'class-validator';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
-    private readonly taskRepository: TaskRepository,
   ) {}
 
-  async findTaskByUser(id: string): Promise<void> {
-    try {
-      const user = await this.userRepository.findOneBy({
-        id,
-      });
-      if (user) {
-        return this.userRepository.findTaskByUser(id);
-      }
-    } catch (error) {
+  async verifyId(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid UUID format for ID');
+    }
+
+    const findUser = await this.userRepository.findOne({
+      where: { id },
+    });
+
+    if (!findUser) {
       throw new NotFoundException(`User with ID "${id}" not found`);
     }
+
+    return findUser;
   }
 
-  async updateTaskbyUser(
-    id: string,
-    updateTaskByUserDto: UpdateTaskByUserDto,
-  ): Promise<UpdateTaskByUserDto> {
-    try {
-      const task = await this.taskRepository.findOneBy({
-        id,
-      });
-
-      const { id: userId, title, description } = updateTaskByUserDto;
-      const user = await this.userRepository.findOneBy({
-        id: userId,
-      });
-      if (task && user) {
-        task.title = title;
-        task.description = description;
-        return this.taskRepository.save(task);
-      }
-    } catch (error) {
-      throw new NotFoundException(`User or Task not found`);
-    }
+  async findTaskByUser(id: string): Promise<void> {
+    await this.verifyId(id);
+    return await this.userRepository.findTaskByUser(id);
   }
 }
