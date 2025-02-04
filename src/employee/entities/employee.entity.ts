@@ -19,14 +19,14 @@ export class EmployeeEntity {
   @Column()
   name: string;
 
-  @Column()
-  role: string;
+  @Column({ nullable: true })
+  role?: string;
 
-  @Column({ unique: true })
-  email: string;
+  @Column({ nullable: true })
+  email?: string;
 
-  @Column({ unique: true })
-  phone: string;
+  @Column({ nullable: true })
+  phone?: string;
 
   @ManyToOne(() => UserEntity, (user) => user.id)
   user: UserEntity;

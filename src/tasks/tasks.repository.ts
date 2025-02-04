@@ -43,7 +43,7 @@ export class TaskRepository extends Repository<TaskEntity> {
     return;
   }
 
-  async findOneTask(id: string) {
+  async findOneTask(id: string): Promise<TaskEntity> {
     const sql = await this.query(`
       select e.id as "employeeId", e.name as "employeeName", e.email as "employeeEmail", t.title as "taskTile",
       t.description as "taskDescription", t.status as "taskStatus", t."createdAt" as "taskCreatedAt",
@@ -64,22 +64,22 @@ export class TaskRepository extends Repository<TaskEntity> {
   async createTask(
     createTaskDto: CreateTaskDto,
     user: UserEntity,
-  ): Promise<void> {
+  ): Promise<TaskEntity> {
     const { title, description, createdAt, expectedToFinish, alreadyFinished } =
       createTaskDto;
     const task = this.create({
-      user: user,
       title,
       description,
       status: Status.OPEN,
       createdAt,
       expectedToFinish,
       alreadyFinished,
+      userId: user.id,
     });
-    await this.save(task);
+    const storeTask = await this.save(task);
+    return storeTask;
   }
   async deleteTask(id: string): Promise<void> {
-    console.log(id);
     await this.delete({ id });
   }
 }

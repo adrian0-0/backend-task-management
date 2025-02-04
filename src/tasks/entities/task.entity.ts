@@ -32,8 +32,8 @@ export class TaskEntity {
   @Column()
   expectedToFinish: Date;
 
-  @Column()
-  alreadyFinished: Date;
+  @Column({ nullable: true })
+  alreadyFinished?: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.task)
   @JoinColumn({ name: 'userId' })

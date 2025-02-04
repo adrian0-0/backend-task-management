@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { StockpileModule } from './stockpile/stockpile.module';
 import { EmployeeModule } from './employee/employee.module';
 import { TaskEmployeeModule } from './task-employee/task-employee.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -20,6 +21,8 @@ import { TaskEmployeeModule } from './task-employee/task-employee.module';
     StockpileModule,
     EmployeeModule,
     TaskEmployeeModule,
+    CommonModule,
   ],
+  exports: [CommonModule],
 })
 export class AppModule {}

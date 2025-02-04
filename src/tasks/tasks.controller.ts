@@ -22,6 +22,7 @@ import { User } from '../auth/get-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
 import { TaskEmployeeService } from '../task-employee/task-employee.service';
+import { ResponseDto } from '../common/response/dto/response.dto';
 
 @Controller('tasks')
 @ApiBearerAuth()
@@ -33,7 +34,10 @@ export class TasksController {
   ) {}
 
   @Get()
-  getTaks(@Query() filterDto: GetStatusFilterDto, @User() user: UserEntity) {
+  getTaks(
+    @Query() filterDto: GetStatusFilterDto,
+    @User() user: UserEntity,
+  ): Promise<ResponseDto<TaskEntity[]>> {
     return this.taskService.getTasks(filterDto, user);
   }
 
@@ -41,7 +45,7 @@ export class TasksController {
   findOneTask(
     @Param('id') id: string,
     @User() user: UserEntity,
-  ): Promise<TaskEntity> {
+  ): Promise<ResponseDto<TaskEntity>> {
     return this.taskService.findOneTask(id, user);
   }
 
@@ -49,7 +53,7 @@ export class TasksController {
   createTask(
     @Body() createTaskDto: CreateTaskDto,
     @User() user: UserEntity,
-  ): Promise<void> {
+  ): Promise<ResponseDto<TaskEntity>> {
     return this.taskService.createTask(createTaskDto, user);
   }
 
@@ -67,7 +71,7 @@ export class TasksController {
     @Param('id') id: string,
     @User() user: UserEntity,
     @Body() updateTaskDto: UpdateTaskDto,
-  ): Promise<UpdateTaskDto> {
+  ): Promise<ResponseDto<TaskEntity>> {
     return this.taskService.updateTask(id, user, updateTaskDto);
   }
 
@@ -84,9 +88,13 @@ export class TasksController {
   @Delete('/employee/:id')
   deleteEmployeesToTask(
     @Param('id') id: string,
-    @Body() employeeId: { id: string },
+    @Body() employeeId: string,
     @User() user: UserEntity,
   ): Promise<void> {
-    return this.taskEmployeeService.deleteEmployeesToTask(id, employeeId, user);
+    return this.taskEmployeeService.removeEmployeeFromTask(
+      id,
+      employeeId,
+      user,
+    );
   }
 }

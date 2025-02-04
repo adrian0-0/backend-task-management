@@ -27,7 +27,7 @@ export class TaskEmployeeService {
     employeeId: string[],
     user: UserEntity,
   ): Promise<void> {
-    await this.taskService.verifyId(id, user.id);
+    await this.taskService.verifyId(id, user);
     const employee = await this.taskEmployeeRepository.find({
       where: { employeeId: In(employeeId) },
     });
@@ -47,17 +47,17 @@ export class TaskEmployeeService {
     return await this.taskEmployeeRepository.attachTaskstoEmployee(id, taskId);
   }
 
-  async deleteEmployeesToTask(
+  async removeEmployeeFromTask(
     id: string,
-    employee: { id: string },
+    employeeId: string,
     user: UserEntity,
   ): Promise<void> {
-    await this.taskService.verifyId(id, user.id);
-    await this.employeeService.verifyId(employee.id, user);
+    await this.taskService.verifyId(id, user);
+    await this.employeeService.verifyId(employeeId, user);
 
-    return await this.taskEmployeeRepository.deleteEmployeesToTask(
+    return await this.taskEmployeeRepository.removeEmployeeFromTask(
       id,
-      employee.id,
+      employeeId,
     );
   }
 }

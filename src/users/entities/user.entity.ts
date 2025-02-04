@@ -2,6 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { TaskEntity } from '../../tasks/entities/task.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { EmployeeEntity } from 'src/employee/entities/employee.entity';
+import { StockPileEntity } from 'src/stockpile/entities/stockpile.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -22,4 +23,7 @@ export class UserEntity {
 
   @OneToMany(() => EmployeeEntity, (employee) => employee.user)
   employee: EmployeeEntity[];
+
+  @OneToMany(() => StockPileEntity, (stockpile) => stockpile.user)
+  stockpile: StockPileEntity[];
 }

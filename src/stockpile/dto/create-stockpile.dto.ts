@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 
 export class CreateStockpileDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsUUID()
   taskId: string;
 

@@ -19,6 +19,7 @@ import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { EmployeeEntity } from './entities/employee.entity';
 import { TaskEmployeeService } from 'src/task-employee/task-employee.service';
+import { ResponseDto } from '../common/response/dto/response.dto';
 
 @Controller('employee')
 @ApiBearerAuth()
@@ -30,7 +31,9 @@ export class EmployeeController {
   ) {}
 
   @Get()
-  findAllEmployee(@User() user: UserEntity): Promise<EmployeeEntity[]> {
+  findAllEmployee(
+    @User() user: UserEntity,
+  ): Promise<ResponseDto<EmployeeEntity[]>> {
     return this.employeeService.findAllEmployee(user);
   }
 
@@ -38,7 +41,7 @@ export class EmployeeController {
   findOneEmployee(
     @Param('id') id: string,
     @User() user: UserEntity,
-  ): Promise<EmployeeEntity> {
+  ): Promise<ResponseDto<EmployeeEntity>> {
     return this.employeeService.findOneEmployee(id, user);
   }
 
@@ -46,7 +49,7 @@ export class EmployeeController {
   createEmployee(
     @Body() createEmployeeDto: CreateEmployeeDto,
     @User() user: UserEntity,
-  ): Promise<EmployeeEntity> {
+  ): Promise<ResponseDto<EmployeeEntity>> {
     return this.employeeService.createEmployee(createEmployeeDto, user);
   }
 
@@ -64,7 +67,7 @@ export class EmployeeController {
     @Param('id') id: string,
     @Body() updateEmployeeDto: UpdateEmployeeDto,
     @User() user: UserEntity,
-  ): Promise<EmployeeEntity> {
+  ): Promise<ResponseDto<EmployeeEntity>> {
     return this.employeeService.updateEmployee(id, updateEmployeeDto, user);
   }
 
