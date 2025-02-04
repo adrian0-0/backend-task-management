@@ -1,21 +1,27 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsMobilePhone, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsMobilePhone,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 
 export class CreateEmployeeDto {
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   role: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsEmail()
   @ApiProperty({ default: 'teste@gmail.com' })
   email: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsMobilePhone('pt-BR')
   @ApiProperty({ default: '+55 989888123' })
   phone: string;

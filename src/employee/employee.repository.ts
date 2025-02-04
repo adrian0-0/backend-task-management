@@ -2,9 +2,10 @@ import { DataSource, Repository } from 'typeorm';
 import { EmployeeEntity } from './entities/employee.entity';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { CreateTaskToEmployeeDto } from 'src/task-employee/dto/create-task-to-employee.dto';
 import { UpdateEmployeeDto } from './dto/update-employee.dto';
+import { ResponseDto } from 'src/common/response/dto/response.dto';
 
 @Injectable()
 export class EmployeeRepository extends Repository<EmployeeEntity> {
@@ -29,15 +30,16 @@ export class EmployeeRepository extends Repository<EmployeeEntity> {
   }
 
   async updateEmployee(
-    employee: EmployeeEntity,
+    employee: ResponseDto<EmployeeEntity>,
     updateEmployeeDto: UpdateEmployeeDto,
   ): Promise<EmployeeEntity> {
-    const assignEmployee = Object.assign(employee, updateEmployeeDto);
+    const assignEmployee = Object.assign(employee.data, updateEmployeeDto);
     const storeEmployee = await this.save(assignEmployee);
     return storeEmployee;
   }
 
   async deleteEmployee(id: string): Promise<void> {
     await this.delete(id);
+    return;
   }
 }

@@ -18,6 +18,7 @@ import { User } from '../auth/get-user.decorator';
 import { UserEntity } from '../users/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
+import { ResponseDto } from '../common/response/dto/response.dto';
 
 @Controller('stockpile')
 @ApiBearerAuth()
@@ -26,7 +27,9 @@ export class StockpileController {
   constructor(private readonly stockPileService: StockpileService) {}
 
   @Get()
-  findAllStockpile(@User() user: UserEntity): Promise<StockPileEntity[]> {
+  findAllStockpile(
+    @User() user: UserEntity,
+  ): Promise<ResponseDto<StockPileEntity[]>> {
     return this.stockPileService.findAllStockpile(user);
   }
 
@@ -34,15 +37,16 @@ export class StockpileController {
   findOneStockPile(
     @Param('id') id: string,
     @User() user: UserEntity,
-  ): Promise<StockPileEntity> {
+  ): Promise<ResponseDto<StockPileEntity>> {
     return this.stockPileService.findOneStockpile(id, user);
   }
 
   @Post()
   createStockPile(
     @Body() createStockPileDto: CreateStockpileDto,
-  ): Promise<StockPileEntity> {
-    return this.stockPileService.createStockPile(createStockPileDto);
+    @User() user: UserEntity,
+  ): Promise<ResponseDto<StockPileEntity>> {
+    return this.stockPileService.createStockPile(createStockPileDto, user);
   }
 
   @Patch('/:id')
@@ -50,7 +54,7 @@ export class StockpileController {
     @Param('id') id: string,
     @Body() updateStockPileDto: UpdateStockPileDto,
     @User() user: UserEntity,
-  ): Promise<StockPileEntity> {
+  ): Promise<ResponseDto<StockPileEntity>> {
     return this.stockPileService.updateStockPile(id, updateStockPileDto, user);
   }
 

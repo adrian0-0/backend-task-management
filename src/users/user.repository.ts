@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { SignUpCredentialsDto } from '../auth/dto/auth-credentials.dto';
 import { genSalt, hash } from 'bcrypt';
+import { ResponseDto } from 'src/common/response/dto/response.dto';
 
 @Injectable()
 export class UserRepository extends Repository<UserEntity> {
@@ -32,7 +33,7 @@ export class UserRepository extends Repository<UserEntity> {
     }
   }
 
-  async findTaskByUser(id: string): Promise<void> {
+  async findTaskByUser(id: string): Promise<UserEntity> {
     const sql = await this.query(
       `select t.*
       from task t inner join "user" u ON "userId" = U.id and U.id = '${id}'`,

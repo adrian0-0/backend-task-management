@@ -1,20 +1,17 @@
 import {
-  ConflictException,
-  ForbiddenException,
+  HttpCode,
+  HttpStatus,
   Injectable,
-  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UserRepository } from '../users/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignUpCredentialsDto } from './dto/auth-credentials.dto';
-import { UserEntity } from '../users/entities/user.entity';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
-import { throwError } from 'rxjs';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { IJwtPayload } from './jwt-payload.interface';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
+import { ResponseDto } from '../common/response/dto/response.dto';
 
 @Injectable()
 export class AuthService {
@@ -25,25 +22,24 @@ export class AuthService {
   ) {}
 
   async signup(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
-    if (!signUpCredentialsDto) {
-      throw new NotFoundException(`password or email is empty`);
-    }
     return this.userRepository.createUser(signUpCredentialsDto);
   }
 
-  async signin(
+  async signin<T>(
     signInCredentialsDto: SignInCredentialsDto,
-  ): Promise<{ acessToken: string; userId: string }> {
+  ): Promise<{ acessToken: string } | ResponseDto<T>> {
     const { email, password } = signInCredentialsDto;
     const findUser = await this.userRepository.findOneBy({ email });
 
     if (findUser && (await compare(password, findUser.password))) {
-      const { id: userId } = findUser;
       const payload: IJwtPayload = { email };
       const acessToken: string = await this.jwtService.sign(payload);
-      return { acessToken, userId };
+      return { acessToken };
     } else {
-      throw new UnauthorizedException('Please check your login credentials');
+      return new ResponseDto<T>({
+        statusCode: HttpStatus.UNAUTHORIZED,
+        message: 'Por favor cheque suas credenciais de login!',
+      });
     }
   }
 }

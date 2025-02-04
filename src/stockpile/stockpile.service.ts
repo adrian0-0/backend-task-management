@@ -1,92 +1,111 @@
 import {
   BadRequestException,
-  ConflictException,
-  forwardRef,
-  Inject,
+  HttpException,
+  HttpStatus,
   Injectable,
-  NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { StockPileEntity } from './entities/stockpile.entity';
 import { CreateStockpileDto } from './dto/create-stockpile.dto';
 import { UpdateStockPileDto } from './dto/update-stockpile.dto';
 import { StockpileRepository } from './stockpile.repository';
 import { isUUID } from 'class-validator';
-import { TasksService } from 'src/tasks/tasks.service';
-import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
-import { TaskRepository } from 'src/tasks/tasks.repository';
-import { In } from 'typeorm';
+import { ResponseDto } from 'src/common/response/dto/response.dto';
+import { hrtime } from 'process';
 
 @Injectable()
 export class StockpileService {
-  constructor(
-    private readonly stockpileRepository: StockpileRepository,
-    @Inject(forwardRef(() => TasksService))
-    private readonly taskService: TasksService,
-    private readonly taskRepository: TaskRepository,
-    private readonly userService: UsersService,
-  ) {}
+  constructor(private readonly stockpileRepository: StockpileRepository) {}
 
-  async verifyId(id: string) {
+  async verifyId(
+    id: string,
+    user: UserEntity,
+  ): Promise<ResponseDto<StockPileEntity>> {
     if (!isUUID(id)) {
-      throw new BadRequestException('Invalid UUID format for ID');
+      return new ResponseDto({
+        message: 'Seu Id de identificação é invalido',
+        statusCode: HttpStatus.BAD_REQUEST,
+      });
     }
 
     const stockpile = await this.stockpileRepository.findOne({
-      where: { id },
+      where: { id, user },
     });
 
     if (!stockpile) {
-      throw new NotFoundException(`Stockpile with Id ${id} was not found`);
+      return new ResponseDto({
+        message: `Item com Id ${id} não foi encontrado`,
+        statusCode: HttpStatus.NOT_FOUND,
+      });
     }
 
-    return stockpile;
-  }
-  async isTheSameTask(stockpileTaskId: string, taskId: string) {
-    if (stockpileTaskId !== taskId) {
-      throw new ConflictException(`Check the stockpile credentials`);
-    }
-    return true;
+    return new ResponseDto({
+      statusCode: HttpStatus.OK,
+      data: stockpile,
+    });
   }
 
-  async findAllStockpile(user: UserEntity): Promise<StockPileEntity[]> {
-    return this.stockpileRepository.findAllStockpile(user);
+  async findAllStockpile(
+    user: UserEntity,
+  ): Promise<ResponseDto<StockPileEntity[]>> {
+    const stockpile = await this.stockpileRepository.find({ where: { user } });
+    return new ResponseDto({
+      statusCode: HttpStatus.OK,
+      data: stockpile,
+    });
   }
 
   async findOneStockpile(
     id: string,
     user: UserEntity,
-  ): Promise<StockPileEntity> {
-    const stockpile = await this.verifyId(id);
-    const task = await this.taskService.verifyId(stockpile.taskId, user.id);
-    await this.isTheSameTask(stockpile.taskId, task.id);
-    return await this.stockpileRepository.findOneStockpile(id, user);
+  ): Promise<ResponseDto<StockPileEntity>> {
+    const stockpile = await this.verifyId(id, user);
+    return stockpile;
   }
 
   async createStockPile(
     createStockPileDto: CreateStockpileDto,
-  ): Promise<StockPileEntity> {
-    return this.stockpileRepository.createStockpile(createStockPileDto);
+    user: UserEntity,
+  ): Promise<ResponseDto<StockPileEntity>> {
+    const stockpile = await this.stockpileRepository.createStockpile(
+      createStockPileDto,
+      user,
+    );
+    return new ResponseDto({
+      statusCode: HttpStatus.CREATED,
+      message: 'Item adcionado ao estoque',
+      data: stockpile,
+    });
   }
 
   async updateStockPile(
     id: string,
     updateStockPileDto: UpdateStockPileDto,
     user: UserEntity,
-  ): Promise<StockPileEntity> {
-    const stockpile = await this.verifyId(id);
-    await this.taskService.verifyId(stockpile.taskId, user.id);
-    return this.stockpileRepository.updateStockpile(
+  ): Promise<ResponseDto<StockPileEntity>> {
+    const stockpile = await this.verifyId(id, user);
+    if (stockpile.statusCode !== HttpStatus.OK) {
+      return stockpile;
+    }
+
+    const stockpileData = await this.stockpileRepository.updateStockpile(
       updateStockPileDto,
-      stockpile,
+      stockpile.data,
     );
+
+    return new ResponseDto({
+      statusCode: HttpStatus.OK,
+      message: 'Item atualizado no estoque',
+      data: stockpileData,
+    });
   }
 
   async deleteStockPile(id: string, user: UserEntity): Promise<void> {
-    const stockpile = await this.verifyId(id);
-    await this.taskService.verifyId(stockpile.taskId, user.id);
-    await this.stockpileRepository.delete(id);
+    const stockpile = await this.verifyId(id, user);
+
+    if (stockpile.statusCode !== HttpStatus.OK) {
+      throw new HttpException(stockpile.message, stockpile.statusCode);
+    }
+    await this.stockpileRepository.deleteStockPile(id);
   }
 }
