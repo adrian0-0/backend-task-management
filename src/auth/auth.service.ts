@@ -12,6 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { IJwtPayload } from './jwt-payload.interface';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { ResponseDto } from '../common/response/dto/response.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -21,22 +22,28 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signup(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
+  async signup(
+    signUpCredentialsDto: SignUpCredentialsDto,
+  ): Promise<ResponseDto<UserEntity>> {
     return this.userRepository.createUser(signUpCredentialsDto);
   }
 
-  async signin<T>(
+  async signin(
     signInCredentialsDto: SignInCredentialsDto,
-  ): Promise<{ acessToken: string } | ResponseDto<T>> {
+  ): Promise<ResponseDto<string>> {
     const { email, password } = signInCredentialsDto;
     const findUser = await this.userRepository.findOneBy({ email });
 
     if (findUser && (await compare(password, findUser.password))) {
       const payload: IJwtPayload = { email };
       const acessToken: string = await this.jwtService.sign(payload);
-      return { acessToken };
+      return new ResponseDto<string>({
+        statusCode: HttpStatus.OK,
+        message: 'Login realizado com sucesso',
+        data: acessToken,
+      });
     } else {
-      return new ResponseDto<T>({
+      return new ResponseDto<string>({
         statusCode: HttpStatus.UNAUTHORIZED,
         message: 'Por favor cheque suas credenciais de login!',
       });
