@@ -4,20 +4,23 @@ import { AuthService } from './auth.service';
 import { ApiBody, ApiProperty } from '@nestjs/swagger';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { ResponseDto } from '../common/response/dto/response.dto';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('/signup')
-  signUp(@Body() signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
+  signUp(
+    @Body() signUpCredentialsDto: SignUpCredentialsDto,
+  ): Promise<ResponseDto<UserEntity>> {
     return this.authService.signup(signUpCredentialsDto);
   }
 
   @Post('/signin')
-  signin<T>(
+  signin(
     @Body() signInCredentialsDto: SignInCredentialsDto,
-  ): Promise<{ acessToken: string } | ResponseDto<T>> {
+  ): Promise<ResponseDto<string>> {
     return this.authService.signin(signInCredentialsDto);
   }
 }

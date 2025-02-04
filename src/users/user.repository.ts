@@ -2,6 +2,7 @@ import { DataSource, Repository } from 'typeorm';
 import { UserEntity } from './entities/user.entity';
 import {
   ConflictException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
@@ -14,7 +15,9 @@ export class UserRepository extends Repository<UserEntity> {
   constructor(private dataSource: DataSource) {
     super(UserEntity, dataSource.createEntityManager());
   }
-  async createUser(signUpCredentialsDto: SignUpCredentialsDto): Promise<void> {
+  async createUser(
+    signUpCredentialsDto: SignUpCredentialsDto,
+  ): Promise<ResponseDto<UserEntity>> {
     const { name, email, password } = signUpCredentialsDto;
 
     const salt = await genSalt();
@@ -23,10 +26,17 @@ export class UserRepository extends Repository<UserEntity> {
     const userCreation = this.create({ name, email, password: hashedPassword });
     try {
       await this.save(userCreation);
+      return new ResponseDto({
+        statusCode: HttpStatus.OK,
+        message: 'Email cadastrado com sucesso',
+      });
     } catch (error) {
       const uniqueViolationErr = '23505';
       if (error.code === uniqueViolationErr) {
-        throw new ConflictException('email already exists');
+        return new ResponseDto({
+          statusCode: HttpStatus.CONFLICT,
+          message: 'Email já cadastrado',
+        });
       } else {
         throw new InternalServerErrorException();
       }
