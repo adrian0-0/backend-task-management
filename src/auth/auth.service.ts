@@ -30,20 +30,21 @@ export class AuthService {
 
   async signin(
     signInCredentialsDto: SignInCredentialsDto,
-  ): Promise<ResponseDto<string>> {
+  ): Promise<ResponseDto<{ accessToken: string; userId: string }>> {
     const { email, password } = signInCredentialsDto;
     const findUser = await this.userRepository.findOneBy({ email });
+    const { id } = findUser;
 
     if (findUser && (await compare(password, findUser.password))) {
       const payload: IJwtPayload = { email };
-      const acessToken: string = await this.jwtService.sign(payload);
-      return new ResponseDto<string>({
+      const accessToken: string = await this.jwtService.sign(payload);
+      return new ResponseDto({
         statusCode: HttpStatus.OK,
         message: 'Login realizado com sucesso',
-        data: acessToken,
+        data: { accessToken, userId: id },
       });
     } else {
-      return new ResponseDto<string>({
+      return new ResponseDto({
         statusCode: HttpStatus.UNAUTHORIZED,
         message: 'Por favor cheque suas credenciais de login!',
       });
