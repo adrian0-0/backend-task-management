@@ -45,10 +45,10 @@ export class UserRepository extends Repository<UserEntity> {
 
   async findTaskByUser(id: string): Promise<UserEntity> {
     const sql = await this.query(
-      `select t.*
-      from task t inner join "user" u ON "userId" = U.id and U.id = '${id}'`,
+      `select u."name", u."email"
+      from "user" u where id='${id}'`,
     );
 
-    return sql;
+    return sql[0];
   }
 }

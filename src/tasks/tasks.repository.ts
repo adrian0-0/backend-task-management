@@ -4,7 +4,7 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Status } from './task-status.enum';
 import { GetStatusFilterDto } from './dto/get-status-filter.dto';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { compare } from 'bcrypt';
 import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
 
@@ -35,7 +35,26 @@ export class TaskRepository extends Repository<TaskEntity> {
       );
     }
 
-    const tasks = await this.find({ where: { userId: id } });
+    const tasks = await this.query(`
+    SELECT 
+      t."id", 
+      t."title", 
+      STRING_AGG(s."id"::text, E'\n') as "stockpileId",
+      STRING_AGG(s."name"::text, E'\n') AS "stockpileName", 
+      STRING_AGG(e."id"::text, E'\n') AS "employeeId",
+      STRING_AGG(e."name", E'\n') AS "employeeName",
+      t."description",
+      t."status", 
+      t."createdAt", 
+      t."expectedToFinish", 
+      t."alreadyFinished"
+    FROM task t 
+    LEFT JOIN stockpile s ON t.id = s."taskId"
+    LEFT JOIN "taskEmployee" te ON t.id = te."taskId" 
+    LEFT JOIN employee e ON te."employeeId" = e."id"  
+    WHERE t."userId" = '591af291-73af-4673-9bbb-c4377e6a5598'
+    GROUP BY t."id";
+   `);
     return tasks;
   }
 

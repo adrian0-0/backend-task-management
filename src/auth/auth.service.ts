@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UserRepository } from '../users/user.repository';
+import { UserRepository } from '../user/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SignUpCredentialsDto } from './dto/auth-credentials.dto';
 import { compare } from 'bcrypt';
@@ -12,7 +12,7 @@ import { JwtService } from '@nestjs/jwt';
 import { IJwtPayload } from './jwt-payload.interface';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { ResponseDto } from '../common/response/dto/response.dto';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class AuthService {

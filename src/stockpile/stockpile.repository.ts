@@ -3,7 +3,7 @@ import { StockPileEntity } from './entities/stockpile.entity';
 import { CreateStockpileDto } from './dto/create-stockpile.dto';
 import { Injectable } from '@nestjs/common';
 import { UpdateStockPileDto } from './dto/update-stockpile.dto';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class StockpileRepository extends Repository<StockPileEntity> {

@@ -19,7 +19,9 @@ export class TaskEmployeeEntity {
   @PrimaryColumn()
   employeeId: string;
 
-  @ManyToOne(() => TaskEntity, (task) => task.taskEmployees)
+  @ManyToOne(() => TaskEntity, (task) => task.taskEmployees, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'taskId' })
   task: TaskEntity;
 

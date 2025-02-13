@@ -8,8 +8,8 @@ import { TaskRepository } from 'src/tasks/tasks.repository';
 import { EmployeeRepository } from 'src/employee/employee.repository';
 import { StockpileRepository } from 'src/stockpile/stockpile.repository';
 import { StockpileService } from 'src/stockpile/stockpile.service';
-import { UsersService } from 'src/users/users.service';
-import { UserRepository } from 'src/users/user.repository';
+import { UserService } from '../user/user.service';
+import { UserRepository } from 'src/user/user.repository';
 import { TasksController } from 'src/tasks/tasks.controller';
 import { EmployeeService } from 'src/employee/employee.service';
 import { TaskEmployeeRepository } from './task-employee.repository';
@@ -25,7 +25,7 @@ import { TaskEmployeeRepository } from './task-employee.repository';
     TaskRepository,
     StockpileService,
     StockpileRepository,
-    UsersService,
+    UserService,
     UserRepository,
   ],
   imports: [TypeOrmModule.forFeature([TaskEmployeeEntity]), AuthModule],

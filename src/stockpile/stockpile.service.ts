@@ -9,7 +9,7 @@ import { CreateStockpileDto } from './dto/create-stockpile.dto';
 import { UpdateStockPileDto } from './dto/update-stockpile.dto';
 import { StockpileRepository } from './stockpile.repository';
 import { isUUID } from 'class-validator';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { ResponseDto } from 'src/common/response/dto/response.dto';
 import { hrtime } from 'process';
 

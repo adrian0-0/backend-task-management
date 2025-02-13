@@ -8,7 +8,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Status } from '../task-status.enum';
-import { UserEntity } from '../../users/entities/user.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import { StockPileEntity } from '../../stockpile/entities/stockpile.entity';
 import { TaskEmployeeEntity } from '../../task-employee/entities/task-employee.entity';
 

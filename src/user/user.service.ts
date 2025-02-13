@@ -11,7 +11,7 @@ import { ResponseDto } from '../common/response/dto/response.dto';
 import { UserEntity } from './entities/user.entity';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(UserRepository)
     private readonly userRepository: UserRepository,
