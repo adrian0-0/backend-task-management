@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { CreateTaskToEmployeeDto } from './dto/create-task-to-employee.dto';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { TaskEmployeeRepository } from './task-employee.repository';
 import { TasksService } from 'src/tasks/tasks.service';
 import { EmployeeRepository } from 'src/employee/employee.repository';

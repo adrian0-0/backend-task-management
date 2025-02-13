@@ -4,7 +4,7 @@ import { CreateTaskToEmployeeDto } from './dto/create-task-to-employee.dto';
 import { Injectable } from '@nestjs/common';
 import { TaskEntity } from 'src/tasks/entities/task.entity';
 import { EmployeeEntity } from 'src/employee/entities/employee.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class TaskEmployeeRepository extends Repository<TaskEmployeeEntity> {

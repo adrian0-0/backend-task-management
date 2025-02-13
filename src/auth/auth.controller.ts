@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { ApiBody, ApiProperty } from '@nestjs/swagger';
 import { SignInCredentialsDto } from './dto/signin-credentials.dto';
 import { ResponseDto } from '../common/response/dto/response.dto';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {

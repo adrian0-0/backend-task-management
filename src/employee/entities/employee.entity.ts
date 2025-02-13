@@ -1,5 +1,5 @@
 import { TaskEmployeeEntity } from '../../task-employee/entities/task-employee.entity';
-import { UserEntity } from '../../users/entities/user.entity';
+import { UserEntity } from '../../user/entities/user.entity';
 import {
   Column,
   Entity,

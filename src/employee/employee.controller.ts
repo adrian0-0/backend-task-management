@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import { User } from 'src/auth/get-user.decorator';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { CreateEmployeeDto } from './dto/create-employee.dto';

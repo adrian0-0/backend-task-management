@@ -15,11 +15,11 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskRepository } from './tasks.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './entities/task.entity';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { StockpileRepository } from 'src/stockpile/stockpile.repository';
 import { isUUID } from 'class-validator';
 import { StockpileService } from 'src/stockpile/stockpile.service';
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/user/user.service';
 import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';
 import { EmployeeRepository } from 'src/employee/employee.repository';
 import { ResponseDto } from '../common/response/dto/response.dto';
@@ -29,7 +29,7 @@ export class TasksService {
   constructor(
     @InjectRepository(TaskRepository)
     private readonly taskRepository: TaskRepository,
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
     private readonly stockpileRepository: StockpileRepository,
     @Inject(forwardRef(() => StockpileService))
     private readonly stockpileService: StockpileService,

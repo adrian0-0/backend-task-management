@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { UserRepository } from '../users/user.repository';
+import { UserRepository } from '../user/user.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IJwtPayload } from './jwt-payload.interface';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()

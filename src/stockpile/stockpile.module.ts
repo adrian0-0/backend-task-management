@@ -6,8 +6,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { StockPileEntity } from './entities/stockpile.entity';
 import { TasksService } from 'src/tasks/tasks.service';
 import { TaskRepository } from 'src/tasks/tasks.repository';
-import { UsersService } from 'src/users/users.service';
-import { UserRepository } from 'src/users/user.repository';
+import { UserService } from 'src/user/user.service';
+import { UserRepository } from 'src/user/user.repository';
 import { TasksModule } from '../tasks/tasks.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { EmployeeService } from '../employee/employee.service';
@@ -20,7 +20,7 @@ import { EmployeeRepository } from '../employee/employee.repository';
     StockpileRepository,
     TasksService,
     TaskRepository,
-    UsersService,
+    UserService,
     UserRepository,
     EmployeeService,
     EmployeeRepository,

@@ -17,14 +17,14 @@ export class CreateTaskDto {
   description: string;
 
   @IsOptional()
-  @IsDate()
+  @IsString()
   createdAt: Date;
 
   @IsOptional()
-  @IsDate()
+  @IsString()
   alreadyFinished: Date;
 
   @IsOptional()
-  @IsDate()
+  @IsString()
   expectedToFinish: Date;
 }

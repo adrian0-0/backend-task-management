@@ -1,5 +1,5 @@
 import { TaskEntity } from 'src/tasks/entities/task.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('stockpile')

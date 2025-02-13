@@ -5,24 +5,26 @@ import { TaskEntity } from './tasks/entities/task.entity';
 import { TaskRepository } from './tasks/tasks.repository';
 import { AuthModule } from './auth/auth.module';
 import { DatabaseModule } from './database/database.module';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { StockpileModule } from './stockpile/stockpile.module';
 import { EmployeeModule } from './employee/employee.module';
 import { TaskEmployeeModule } from './task-employee/task-employee.module';
 import { CommonModule } from './common/common.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
     TasksModule,
     AuthModule,
     DatabaseModule,
-    UsersModule,
+    UserModule,
     StockpileModule,
     EmployeeModule,
     TaskEmployeeModule,
     CommonModule,
+    PassportModule,
   ],
-  exports: [CommonModule],
+  exports: [CommonModule, PassportModule],
 })
 export class AppModule {}

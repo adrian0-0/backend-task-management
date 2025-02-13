@@ -7,7 +7,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { EmployeeEntity } from './entities/employee.entity';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import { CreateEmployeeDto } from './dto/create-employee.dto';
 import { EmployeeRepository } from './employee.repository';
 import { isUUID } from 'class-validator';

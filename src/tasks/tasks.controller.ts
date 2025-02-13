@@ -17,7 +17,7 @@ import { GetStatusFilterDto } from './dto/get-status-filter.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { TaskEntity } from './entities/task.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { User } from '../auth/get-user.decorator';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { CreateTaskToEmployeeDto } from '../task-employee/dto/create-task-to-employee.dto';

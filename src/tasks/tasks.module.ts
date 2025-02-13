@@ -7,8 +7,8 @@ import { TaskEntity } from './entities/task.entity';
 import { AuthModule } from '../auth/auth.module';
 import { StockpileService } from '../stockpile/stockpile.service';
 import { StockpileRepository } from '../stockpile/stockpile.repository';
-import { UsersService } from '../users/users.service';
-import { UserRepository } from '../users/user.repository';
+import { UserService } from '../user/user.service';
+import { UserRepository } from '../user/user.repository';
 import { StockpileModule } from '../stockpile/stockpile.module';
 import { EmployeeRepository } from '../employee/employee.repository';
 import { EmployeeService } from '../employee/employee.service';
@@ -23,7 +23,7 @@ import { TaskEmployeeRepository } from '../task-employee/task-employee.repositor
     TaskEmployeeRepository,
     StockpileService,
     StockpileRepository,
-    UsersService,
+    UserService,
     UserRepository,
     EmployeeService,
     EmployeeRepository,

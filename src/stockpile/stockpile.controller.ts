@@ -15,7 +15,7 @@ import { StockPileEntity } from './entities/stockpile.entity';
 import { CreateStockpileDto } from './dto/create-stockpile.dto';
 import { UpdateStockPileDto } from './dto/update-stockpile.dto';
 import { User } from '../auth/get-user.decorator';
-import { UserEntity } from '../users/entities/user.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { ResponseDto } from '../common/response/dto/response.dto';
