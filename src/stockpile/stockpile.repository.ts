@@ -11,6 +11,31 @@ export class StockpileRepository extends Repository<StockPileEntity> {
     super(StockPileEntity, dataSource.createEntityManager());
   }
 
+  async findAllStockpile(user: UserEntity): Promise<StockPileEntity[]> {
+    const sql = await this.query(`
+      select s.id, s.name, s.quant, s.description,
+      t.title as "taskTitle", t.status as "taskStatus"
+      from stockpile s 
+      left join task t ON s."taskId" = t.id
+      where s."userId" ='${user.id}'`);
+    return sql;
+  }
+
+  async findOneStockpile(id: string): Promise<StockPileEntity> {
+    const [sql] = await this.query(`
+      select s.name, s.quant, s.description, t.id as "taskId",
+      t.title as "taskTitle", t.description as "taskDescription", 
+      t.status as "taskStatus", t."createdAt" as "taskCreatedAt",
+      t."expectedToFinish" as "taskExpectedToFinish",
+      t."alreadyFinished" as "taskAlreadyFinished"
+      from stockpile s 
+      left join task t ON s."taskId" = t.id 
+      where s.id = '${id}'
+      group by s.id, t.id
+    `);
+    return sql;
+  }
+
   async createStockpile(
     createStockPileDto: CreateStockpileDto,
     user: UserEntity,

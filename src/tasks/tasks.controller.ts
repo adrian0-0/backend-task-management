@@ -60,10 +60,10 @@ export class TasksController {
   @Post('/employee/:id')
   attachEmployeesToTask(
     @Param('id') id: string,
-    @Body() employeeId: string[],
+    @Body() taskId: string[],
     @User() user: UserEntity,
   ): Promise<void> {
-    return this.taskEmployeeService.attachEmployeesToTask(id, employeeId, user);
+    return this.taskEmployeeService.attachEmployeesToTask(id, taskId, user);
   }
 
   @Patch('/:id')

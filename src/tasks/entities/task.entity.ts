@@ -20,8 +20,8 @@ export class TaskEntity {
   @Column()
   title: string;
 
-  @Column()
-  description: string;
+  @Column({ nullable: true })
+  description?: string;
 
   @Column()
   status: Status;

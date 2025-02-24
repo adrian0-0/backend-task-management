@@ -90,10 +90,7 @@ export class TasksService {
     });
   }
 
-  async findOneTask(
-    id: string,
-    user: UserEntity,
-  ): Promise<ResponseDto<TaskEntity>> {
+  async findOneTask(id: string, user: UserEntity): Promise<any> {
     const task = await this.verifyId(id, user);
     if (task.statusCode !== HttpStatus.OK) {
       return task;

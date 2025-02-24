@@ -44,11 +44,11 @@ export class UserRepository extends Repository<UserEntity> {
   }
 
   async findTaskByUser(id: string): Promise<UserEntity> {
-    const sql = await this.query(
+    const [sql] = await this.query(
       `select u."name", u."email"
       from "user" u where id='${id}'`,
     );
 
-    return sql[0];
+    return sql;
   }
 }

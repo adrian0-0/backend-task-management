@@ -24,18 +24,15 @@ export class TaskEmployeeService {
 
   async attachEmployeesToTask(
     id: string,
-    employeeId: string[],
+    taskId: string[],
     user: UserEntity,
   ): Promise<void> {
     await this.taskService.verifyId(id, user);
     const employee = await this.taskEmployeeRepository.find({
-      where: { employeeId: In(employeeId) },
+      where: { taskId: In(taskId) },
     });
 
-    return await this.taskEmployeeRepository.attachEmployeesToTask(
-      id,
-      employeeId,
-    );
+    return await this.taskEmployeeRepository.attachEmployeesToTask(id, taskId);
   }
 
   async attachTaskstoEmployee(id: string, taskId: string[], user: UserEntity) {

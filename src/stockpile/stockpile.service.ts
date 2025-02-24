@@ -48,7 +48,7 @@ export class StockpileService {
   async findAllStockpile(
     user: UserEntity,
   ): Promise<ResponseDto<StockPileEntity[]>> {
-    const stockpile = await this.stockpileRepository.find({ where: { user } });
+    const stockpile = await this.stockpileRepository.findAllStockpile(user);
     return new ResponseDto({
       statusCode: HttpStatus.OK,
       data: stockpile,
@@ -59,8 +59,12 @@ export class StockpileService {
     id: string,
     user: UserEntity,
   ): Promise<ResponseDto<StockPileEntity>> {
-    const stockpile = await this.verifyId(id, user);
-    return stockpile;
+    await this.verifyId(id, user);
+    const stockpile = await this.stockpileRepository.findOneStockpile(id);
+    return new ResponseDto({
+      statusCode: HttpStatus.OK,
+      data: stockpile,
+    });
   }
 
   async createStockPile(
