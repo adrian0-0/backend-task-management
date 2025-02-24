@@ -49,10 +49,10 @@ export class EmployeeService {
   async findAllEmployee(
     user: UserEntity,
   ): Promise<ResponseDto<EmployeeEntity[]>> {
-    const findUser = await this.employeeRepository.find({ where: { user } });
+    const employee = await this.employeeRepository.findAllEmployee(user);
     return new ResponseDto({
       statusCode: HttpStatus.OK,
-      data: findUser,
+      data: employee,
     });
   }
 
@@ -60,8 +60,13 @@ export class EmployeeService {
     id: string,
     user: UserEntity,
   ): Promise<ResponseDto<EmployeeEntity>> {
-    const employee = await this.verifyId(id, user);
-    return employee;
+    await this.verifyId(id, user);
+    const employee = await this.employeeRepository.findOneEmployee(id);
+
+    return new ResponseDto({
+      statusCode: HttpStatus.OK,
+      data: employee,
+    });
   }
 
   async createEmployee(

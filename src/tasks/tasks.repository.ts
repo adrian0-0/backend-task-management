@@ -58,24 +58,36 @@ export class TaskRepository extends Repository<TaskEntity> {
     return tasks;
   }
 
-  async getTaskById(id: string): Promise<TaskEntity> {
-    return;
-  }
-
   async findOneTask(id: string): Promise<TaskEntity> {
-    const sql = await this.query(`
-      select e.id as "employeeId", e.name as "employeeName", e.email as "employeeEmail", t.title as "taskTile",
-      t.description as "taskDescription", t.status as "taskStatus", t."createdAt" as "taskCreatedAt",
-      t."expectedToFinish" as "taskExpectedToFinish", t."alreadyFinished" as "taskAlreadyFinished", s.id as "stockpileId",
-      s."name" as "stockpileName", s.quant as "stockpileQuant", s.description as "stockpileDescription"
-      from task t
-      full join "taskEmployee" te 
-      on te."taskId" = t.id
-      full join employee e
-      on e.id = te."employeeId"
-      full join stockpile s 
-      on s."taskId" = t.id 
-      where t.id = '${id}'
+    const [sql] = await this.query(`
+    select     
+        t.title, 
+        t.description, 
+        t.status, 
+        t."createdAt", 
+        t."expectedToFinish", 
+        t."alreadyFinished",
+        s.id as "stockpileId", 
+        s.name as "stockpileName",
+        s.quant as "stockpileQuant", 
+        s.description as "stockpileDescription",
+        coalesce (
+            json_agg(
+                jsonb_build_object(
+                    'id', e.id,
+                    'name', e.name,
+                    'role', e.role,
+                    'email', e.email,
+                    'phone', e.phone
+                )
+            ) filter (where e.id is not null), '[]'::json
+        ) as employees 
+    from task t
+    left join "taskEmployee" te on t.id = te."taskId"
+    left join employee e on te."employeeId" = e.id 
+    left join stockpile s on t.id = s."taskId" 
+    where t.id = '${id}'
+    group by t.id, s."id"
     `);
     return sql;
   }

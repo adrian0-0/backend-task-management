@@ -26,7 +26,6 @@ export class TaskEmployeeRepository extends Repository<TaskEmployeeEntity> {
 
   async attachTaskstoEmployee(id: string, taskId: string[]): Promise<void> {
     const values = taskId.map((taskId) => `('${id}', '${taskId}')`).join(', ');
-
     await this.query(`
     insert into "taskEmployee" ("employeeId", "taskId")
     values ${values}

@@ -22,7 +22,7 @@ export class CreateEmployeeDto {
   email: string;
 
   @IsOptional()
-  @IsMobilePhone('pt-BR')
+  @IsString()
   @ApiProperty({ default: '+55 989888123' })
   phone: string;
 }
