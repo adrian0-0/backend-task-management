@@ -20,6 +20,7 @@ import { UpdateEmployeeDto } from './dto/update-employee.dto';
 import { EmployeeEntity } from './entities/employee.entity';
 import { TaskEmployeeService } from 'src/task-employee/task-employee.service';
 import { ResponseDto } from '../common/response/dto/response.dto';
+import { identity } from 'rxjs';
 
 @Controller('employee')
 @ApiBearerAuth()
@@ -75,5 +76,15 @@ export class EmployeeController {
   @Delete('/:id')
   deleteEmployee(@Param('id') id: string, user: UserEntity): Promise<void> {
     return this.employeeService.deleteEmployee(id, user);
+  }
+
+  @Delete('/tasks/:id/:taskId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  removeTasksfromEmployee(
+    @Param('id') id: string,
+    @Param('taskId') taskId: string,
+    @User() user: UserEntity,
+  ): Promise<void> {
+    return this.taskEmployeeService.removeTasksfromEmployee(id, taskId, user);
   }
 }

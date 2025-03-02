@@ -12,7 +12,6 @@ import { EmployeeRepository } from 'src/employee/employee.repository';
 import { In } from 'typeorm';
 import { TaskRepository } from 'src/tasks/tasks.repository';
 import { EmployeeService } from 'src/employee/employee.service';
-import e from 'express';
 
 @Injectable()
 export class TaskEmployeeService {
@@ -56,5 +55,15 @@ export class TaskEmployeeService {
       id,
       employeeId,
     );
+  }
+
+  async removeTasksfromEmployee(
+    id: string,
+    taskId: string,
+    user: UserEntity,
+  ): Promise<void> {
+    await this.employeeService.verifyId(id, user);
+    await this.taskService.verifyId(taskId, user);
+    return this.taskEmployeeRepository.removeEmployeeFromTask(taskId, id);
   }
 }

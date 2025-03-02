@@ -85,10 +85,10 @@ export class TasksController {
   }
 
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Delete('/employee/:id')
+  @Delete('/employee/:id/:employeeId')
   deleteEmployeesToTask(
     @Param('id') id: string,
-    @Body() employeeId: string,
+    @Param('employeeId') employeeId: string,
     @User() user: UserEntity,
   ): Promise<void> {
     return this.taskEmployeeService.removeEmployeeFromTask(
