@@ -58,7 +58,7 @@ export class StockpileRepository extends Repository<StockPileEntity> {
   ): Promise<StockPileEntity> {
     const updatedStockpile = Object.assign(stockpile, updateStockPileDto);
     const storeStockpile = this.save(updatedStockpile);
-    return storeStockpile;
+    return updatedStockpile;
   }
 
   async deleteStockPile(id: string): Promise<void> {

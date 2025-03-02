@@ -1,6 +1,12 @@
 import { TaskEntity } from 'src/tasks/entities/task.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('stockpile')
 export class StockPileEntity {
@@ -27,7 +33,7 @@ export class StockPileEntity {
   @ManyToOne(() => TaskEntity, (task) => task.stockpile, {
     onDelete: 'CASCADE',
   })
-  task?: TaskEntity;
+  task: string;
 
   @Column({ name: 'taskId', nullable: true })
   taskId?: string;
