@@ -12,24 +12,13 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v3
 
-      - name: Force print secrets
-        run: |
-          echo "SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}"
-          echo "REMOTE_HOST: ${{ secrets.EC2_REMOTE_HOST }}"
-          echo "REMOTE_USER: ${{ secrets.EC2_REMOTE_USER }}"
-          echo "TARGET: ${{ secrets.EC2_TARGET_DIR }}"
-          echo "EXCLUDE: ${{ secrets.EXCLUDE }}"
-        env:
-          SOURCE: './'
-          EXCLUDE: '/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh'
-
       - name: Copy files with SSH
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+          SSH_PRIVATE_KEY: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCWPxxXn2tbdHxvrPz7n+6hta9o2Y7C6+tynfsJhtUNw/BngvGYPoNSOfANCvCJsoPUiWeNqI+JfbERQzuyR+IwtDnaG1Oej9eF+VSeldE0cb5TlsQ55DyQmQvD9y9GMD3AN+z6BwwsX8uWFFwv5620s0wUyO0jAzORCQ5JTI4cV/Fnz4z91Nt8ZzuANlVW48/N4MND1di96Y/u3Oj1CZsH+MsqD6cs0fLeH6sN2Cxws29bklE3AlUJfXxA1qe/6B2FtsxTyPZksfmoNNWhqos1NJKBet8PzTR/SZJ7H/7OegEJJjqreqAm62DkhQ7qPr7BmUrP0jMIMYzXrN6XI7gf admin77'
           ARGS: '-rltgoDzvO --delete'
           SOURCE: './'
-          REMOTE_HOST: ${{ secrets.EC2_REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.EC2_REMOTE_USER }}
-          TARGET: ${{ secrets.EC2_TARGET_DIR }}
+          REMOTE_HOST: 'ec2-54-164-132-113.compute-1.amazonaws.com'
+          REMOTE_USER: 'ubuntu'
+          TARGET: '/home/ubuntu'
           EXCLUDE: '/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh'
