@@ -12,18 +12,15 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v3
 
-      - name: Log environment variables
+      - name: Force print secrets (not recommended)
         run: |
-          echo "SOURCE: $SOURCE"
-          echo "REMOTE_HOST: $REMOTE_HOST"
-          echo "REMOTE_USER: $REMOTE_USER"
-          echo "TARGET: $TARGET"
-          echo "EXCLUDE: $EXCLUDE"
+          echo "SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}"
+          echo "REMOTE_HOST: ${{ secrets.EC2_REMOTE_HOST }}"
+          echo "REMOTE_USER: ${{ secrets.EC2_REMOTE_USER }}"
+          echo "TARGET: ${{ secrets.EC2_TARGET_DIR }}"
+          echo "EXCLUDE: ${{ secrets.EXCLUDE }}"
         env:
           SOURCE: './'
-          REMOTE_HOST: ${{ secrets.EC2_REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.EC2_REMOTE_USER }}
-          TARGET: ${{ secrets.EC2_TARGET_DIR }}
           EXCLUDE: '/dist/, /node_modules/, **.env, rebuild_app.sh, watcher.sh'
 
       - name: Copy files with SSH
