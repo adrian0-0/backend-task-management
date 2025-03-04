@@ -39,8 +39,8 @@ export class TaskRepository extends Repository<TaskEntity> {
     SELECT 
       t."id", 
       t."title", 
-      STRING_AGG(s."id"::text, E'\n') as "stockpileId",
-      STRING_AGG(s."name"::text, E'\n') AS "stockpileName", 
+      s."id" as "stockpileId",
+      s."name" AS "stockpileName", 
       STRING_AGG(e."id"::text, E'\n') AS "employeeId",
       STRING_AGG(e."name", E'\n') AS "employeeName",
       t."description",
@@ -52,8 +52,8 @@ export class TaskRepository extends Repository<TaskEntity> {
     LEFT JOIN stockpile s ON t.id = s."taskId"
     LEFT JOIN "taskEmployee" te ON t.id = te."taskId" 
     LEFT JOIN employee e ON te."employeeId" = e."id"  
-    WHERE t."userId" = '591af291-73af-4673-9bbb-c4377e6a5598'
-    GROUP BY t."id";
+    WHERE t."userId" = '${user.id}'
+    GROUP BY t."id", s."id";
    `);
     return tasks;
   }
