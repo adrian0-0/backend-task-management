@@ -15,7 +15,34 @@ jobs:
       - name: Copy files with SSH
         uses: easingthemes/ssh-deploy@main
         env:
-          SSH_PRIVATE_KEY: 'MIIEpQIBAAKCAQEAlj8cV59rW3R8b6z8+5/uobWvaNmOwuvrcp37CYbVDcPwZ4LxmD6DUjnwDQrwibKD1IlnjaiPiX2xEUM7skfiMLQ52htTno/XhflUnpXRNHG+U5bEOeQ8kJkLw/cvRjA9wDfs+gcMLF/LlhRcL+ettLNMFMjtIwMzkQkOSUyOHFfxZ8+M/dTbfGc7gDZVVuPPzeDDQ9XYvemP7tzo9QmbB/jLKg+nLNHy3h+rDdgscLNvW5JRNwJVCX18QNanv+gdhbbMU8j2ZLH5qDTVoaqLNTSSgXrfD800f0mSex/+znoBCSY6q3qgJutg5IUO6j6+wZlKz9IzCDGM16zelyO4HwIDAQABAoIBAGBI25HvsS4vzVsIAiwDBzuMonfQDGQwKngOdAVb6gdjTRoY2VjWnvO/+21wWEv2IfO/hqRKpInZCfNlIcmTtYm+xeBXaNQRnG3YJflnS2WPiwgoc2IiOQn1eovASgRx//DCJlTo1U1OqrpoG9f7Yd+Ok7AyP34TnCVTJ1uj+uKAGwXOen93PaBKn9woinHG4XgWct4Gr7GvDoczS9z060JvK7vuzankDB8f1cIwxjEtXX6RQbOF5KwlMiahOJf1zTUvPLop9DaZs7Bh/l9QJs1j3uKbcNXm8KL94+z1MaBUPLaRAt0Y8s+g2PTP72meuOuOA7KBJ4DmyTDsqU95XAkCgYEA99Fv29Q0JQdvYmG5HcYFdKILaDUbfMBHL6Bfz4Gsql+Haa3inYkCZQ1qojc6+Nh/DlKXPZh5KKbqdFP8AeRUFRKgRK37VE1cXAQ54RLTB4E1NM9+mMK1os/kqeYLV70zOyI14EI1fsAVJsdrzc7JvGkZBNj4u31zHzvzoqAreu0CgYEAmzT/OxIsobYI650i9YOuqhN+vAatvlylAIQd7osvZOBiOgXeC0A9A8jFcBstg3Tg4vC3cMz9wKMA2xOR1+AWIDDwLaJ7s+xAtoPqF0NiSABq1o7FOwjnhaD+YOsXhqxmEQXWiu4HVHceovfxHWc4y7FcJoiGIX47/6McsPC+AbsCgYEA3ms2/hIjCuj1a1NSFgrYcqnNmyWvGfRo77H8y/0Sv4clvg+2yLVjVNcJ0bXIU/fbcTtnSn1CoN3Op8GI+Rm47YDeH0YXwL3+Gwgf+oYuqRmqa0+fy/NVml8EWAiEPacuB/DYcgJ6iNxVH4z0kK78GQIq1lL2SzB41pu0O02OOLECgYEAmYj4vzfAXQxVkLa2gYcNfwOgCGLW9wxw0azgazzW2oS5xspNGHYopZiz762C/ZreaMFVxkmS8ECPtSiLyrDLUnb28T3d/2PDtImURgULsUxwY+WCKF8roN5dJgUKFdhvc4GB9Zd4Os9HyFFb/QlCfwXpsdi2T2Wv9rglxsewPscCgYEAzIbN0Zw2pC2PFZ/bv5SHquybuhdal94PUMWkJWV2ipF0txuoDYCAiq+ZFzk+V8IR3dNxvtf+KHemyQQJdHh778GN/fyjscNSfhuDauIWbO9JtYEmsvaK3qA3NXFhTEIsvDOSwpoSLwgu22DvdRz8JhAB9f6utIunjRVlMTtSqck='
+          SSH_PRIVATE_KEY: |
+            -----BEGIN RSA PRIVATE KEY-----
+            MIIEpQIBAAKCAQEAlj8cV59rW3R8b6z8+5/uobWvaNmOwuvrcp37CYbVDcPwZ4Lx
+            mD6DUjnwDQrwibKD1IlnjaiPiX2xEUM7skfiMLQ52htTno/XhflUnpXRNHG+U5bE
+            OeQ8kJkLw/cvRjA9wDfs+gcMLF/LlhRcL+ettLNMFMjtIwMzkQkOSUyOHFfxZ8+M
+            /dTbfGc7gDZVVuPPzeDDQ9XYvemP7tzo9QmbB/jLKg+nLNHy3h+rDdgscLNvW5JR
+            NwJVCX18QNanv+gdhbbMU8j2ZLH5qDTVoaqLNTSSgXrfD800f0mSex/+znoBCSY6
+            q3qgJutg5IUO6j6+wZlKz9IzCDGM16zelyO4HwIDAQABAoIBAGBI25HvsS4vzVsI
+            AiwDBzuMonfQDGQwKngOdAVb6gdjTRoY2VjWnvO/+21wWEv2IfO/hqRKpInZCfNl
+            IcmTtYm+xeBXaNQRnG3YJflnS2WPiwgoc2IiOQn1eovASgRx//DCJlTo1U1Oqrpo
+            G9f7Yd+Ok7AyP34TnCVTJ1uj+uKAGwXOen93PaBKn9woinHG4XgWct4Gr7GvDocz
+            S9z060JvK7vuzankDB8f1cIwxjEtXX6RQbOF5KwlMiahOJf1zTUvPLop9DaZs7Bh
+            /l9QJs1j3uKbcNXm8KL94+z1MaBUPLaRAt0Y8s+g2PTP72meuOuOA7KBJ4DmyTDs
+            qU95XAkCgYEA99Fv29Q0JQdvYmG5HcYFdKILaDUbfMBHL6Bfz4Gsql+Haa3inYkC
+            ZQ1qojc6+Nh/DlKXPZh5KKbqdFP8AeRUFRKgRK37VE1cXAQ54RLTB4E1NM9+mMK1
+            os/kqeYLV70zOyI14EI1fsAVJsdrzc7JvGkZBNj4u31zHzvzoqAreu0CgYEAmzT/
+            OxIsobYI650i9YOuqhN+vAatvlylAIQd7osvZOBiOgXeC0A9A8jFcBstg3Tg4vC3
+            cMz9wKMA2xOR1+AWIDDwLaJ7s+xAtoPqF0NiSABq1o7FOwjnhaD+YOsXhqxmEQXW
+            iu4HVHceovfxHWc4y7FcJoiGIX47/6McsPC+AbsCgYEA3ms2/hIjCuj1a1NSFgrY
+            cqnNmyWvGfRo77H8y/0Sv4clvg+2yLVjVNcJ0bXIU/fbcTtnSn1CoN3Op8GI+Rm4
+            7YDeH0YXwL3+Gwgf+oYuqRmqa0+fy/NVml8EWAiEPacuB/DYcgJ6iNxVH4z0kK78
+            GQIq1lL2SzB41pu0O02OOLECgYEAmYj4vzfAXQxVkLa2gYcNfwOgCGLW9wxw0azg
+            azzW2oS5xspNGHYopZiz762C/ZreaMFVxkmS8ECPtSiLyrDLUnb28T3d/2PDtImU
+            RgULsUxwY+WCKF8roN5dJgUKFdhvc4GB9Zd4Os9HyFFb/QlCfwXpsdi2T2Wv9rgl
+            xsewPscCgYEAzIbN0Zw2pC2PFZ/bv5SHquybuhdal94PUMWkJWV2ipF0txuoDYCA
+            iq+ZFzk+V8IR3dNxvtf+KHemyQQJdHh778GN/fyjscNSfhuDauIWbO9JtYEmsvaK
+            3qA3NXFhTEIsvDOSwpoSLwgu22DvdRz8JhAB9f6utIunjRVlMTtSqck=
+            -----END RSA PRIVATE KEY-----
           ARGS: '-rltgoDzvO --delete'
           SOURCE: './'
           REMOTE_HOST: 'ec2-54-164-132-113.compute-1.amazonaws.com'
