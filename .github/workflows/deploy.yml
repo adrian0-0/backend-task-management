@@ -12,7 +12,7 @@ jobs:
       - name: Checkout the files
         uses: actions/checkout@v3
 
-      - name: Force print secrets (not recommended)
+      - name: Force print secrets
         run: |
           echo "SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}"
           echo "REMOTE_HOST: ${{ secrets.EC2_REMOTE_HOST }}"
