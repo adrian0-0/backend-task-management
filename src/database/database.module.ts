@@ -27,9 +27,9 @@ import { StockPileEntity } from 'src/stockpile/entities/stockpile.entity';
           synchronize: true,
           entities: [TaskEntity],
           // Para testar o banco de dados em ambiente local
-          ssl: {
-            rejectUnauthorized: false,
-          },
+          // ssl: {
+          //  rejectUnauthorized: false,
+          // },
         };
       },
     }),
