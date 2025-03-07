@@ -39,8 +39,8 @@ export class TaskRepository extends Repository<TaskEntity> {
     SELECT 
       t."id", 
       t."title", 
-      STRING_AGG(s."id"::text, E'\n') as "stockpileId",
-      STRING_AGG(s."name"::text, E'\n') AS "stockpileName", 
+      s."id" as "stockpileId",
+      s."name" AS "stockpileName", 
       STRING_AGG(e."id"::text, E'\n') AS "employeeId",
       STRING_AGG(e."name", E'\n') AS "employeeName",
       t."description",
