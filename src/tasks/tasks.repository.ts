@@ -52,7 +52,7 @@ export class TaskRepository extends Repository<TaskEntity> {
     LEFT JOIN stockpile s ON t.id = s."taskId"
     LEFT JOIN "taskEmployee" te ON t.id = te."taskId" 
     LEFT JOIN employee e ON te."employeeId" = e."id"  
-    WHERE t."userId" = '591af291-73af-4673-9bbb-c4377e6a5598'
+    WHERE t."userId" = '${id}'
     GROUP BY t."id";
    `);
     return tasks;
