@@ -29,7 +29,7 @@ import { config } from 'dotenv';
           entities: [TaskEntity],
           ...(configService.get('NODE_ENV') === 'production' && {
             ssl: {
-              rejectUnauthorized: true,
+              rejectUnauthorized: false,
             },
           }),
         };
