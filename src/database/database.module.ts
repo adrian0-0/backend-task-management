@@ -4,6 +4,7 @@ import { configSchema } from './config.schema';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TaskEntity } from '../tasks/entities/task.entity';
 import { StockPileEntity } from 'src/stockpile/entities/stockpile.entity';
+import { config } from 'dotenv';
 
 @Module({
   imports: [
@@ -26,10 +27,11 @@ import { StockPileEntity } from 'src/stockpile/entities/stockpile.entity';
           autoLoadEntities: true,
           synchronize: true,
           entities: [TaskEntity],
-          // Para testar o banco de dados em ambiente local
-          // ssl: {
-          //  rejectUnauthorized: false,
-          // },
+          ...(configService.get('NODE_ENV') === 'production' && {
+            ssl: {
+              rejectUnauthorized: true,
+            },
+          }),
         };
       },
     }),
