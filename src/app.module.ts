@@ -12,8 +12,12 @@ import { EmployeeModule } from './employee/employee.module';
 import { TaskEmployeeModule } from './task-employee/task-employee.module';
 import { CommonModule } from './common/common.module';
 import { PassportModule } from '@nestjs/passport';
+import { AppControler } from './app.controller';
+import { AppService } from './appp.service';
 
 @Module({
+  controllers: [AppControler],
+  providers: [AppService],
   imports: [
     TasksModule,
     AuthModule,
